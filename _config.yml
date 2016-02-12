@@ -17,7 +17,7 @@ disqus_shortname: idrbwjekyll
 # variables
 
 
-sidebar_tagline: Designers
+sidebar_tagline: Isotope
 sidebar_version: Version 4.0
 theme_file: theme-blue.css
 pdf_file_name: mydoc_designers_pdf.pdf
@@ -39,7 +39,7 @@ exclude:
 
 # same for all
 host: 127.0.0.1
-feedback_email: tomjohnson1492@gmail.com
+feedback_email: contact@gamonoid.com
 
 highlighter: rouge
 markdown: kramdown
