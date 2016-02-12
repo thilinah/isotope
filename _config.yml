@@ -7,8 +7,8 @@ excerpt_separator: ""
 gauges_id:
 google_analytics_id:
 
-repository: https://github.com/gamonoid/icehrm
-help_url: http://icehrm.com
+repository: https://github.com/thilinah/isotope
+help_url: http://thilinah.github.io/isotope
 
 collections:
   docs:
