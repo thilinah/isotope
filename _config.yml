@@ -8,6 +8,7 @@ gauges_id:
 google_analytics_id:
 
 repository: https://github.com/thilinah/isotope
+base: /isotope/
 help_url: http://thilinah.github.io/isotope
 
 collections:
