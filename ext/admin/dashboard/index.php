@@ -28,59 +28,35 @@ include APP_BASE_PATH.'modulejslibs.inc.php';
 ?><div class="span9">
 			  
 	<div class="row">
-		<div class="col-lg-3 col-xs-6">
-			<!-- small box -->
-			<div class="small-box bg-aqua">
-				<div class="inner">
-					<h3>
-					People
-					</h3>
-					<p id="numberOfProfiles">
-					.. Profiles
-					</p>
-				</div>
-				<div class="icon">
-					<i class="ion ion-person-stalker"></i>
-				</div>
-				<a href="#" class="small-box-footer" id="profileLink">
-					Manage Profiles <i class="fa fa-arrow-circle-right"></i>
-				</a>
-			</div>
-		</div><!-- ./col -->						                        
-		<div class="col-lg-3 col-xs-6">
-			<!-- small box -->
-			<div class="small-box bg-yellow">
-				<div class="inner">
-					<h3>Users</h3>
-					<p id="numberOfUsers">
-						.. Users
-					</p>
-				</div>
-				<div class="icon">
-					<i class="ion ion-person-add"></i>
-				</div>
-				<a href="#" class="small-box-footer" id="usersLink">
-					Manage Users <i class="fa fa-arrow-circle-right"></i>
-				</a>
-			</div>
-		</div><!-- ./col -->
-		<div class="col-lg-3 col-xs-6">
-			<!-- small box -->
-			<div class="small-box bg-green">
-				<div class="inner">
-					<h3>Settings</h3>
-					<p>
-						Configure IceHrm
-					</p>
-				</div>
-				<div class="icon">
-					<i class="ion ion-settings"></i>
-				</div>
-				<a href="#" class="small-box-footer" id="settingsLink">
-					Update Settings <i class="fa fa-arrow-circle-right"></i>
-				</a>
-			</div>
-		</div><!-- ./col --> 
+        <?php
+        $moduleManagers = BaseService::getInstance()->getModuleManagers();
+        $dashBoardList = array();
+        foreach($moduleManagers as $moduleManagerObj){
+
+            //Check if this is not an admin module
+            if($moduleManagerObj->getModuleType() != 'admin'){
+                continue;
+            }
+
+            $allowed = BaseService::getInstance()->isModuleAllowedForUser($moduleManagerObj);
+
+            if(!$allowed){
+                continue;
+            }
+
+            $item = $moduleManagerObj->getDashboardItem();
+            if(!empty($item)) {
+                $index = $moduleManagerObj->getDashboardItemIndex();
+                $dashBoardList[$index] = $item;
+            }
+        }
+
+        ksort($dashBoardList);
+
+        foreach($dashBoardList as $k=>$v){
+            echo $v;
+        }
+        ?>
 		                
 	</div>
 	
@@ -93,12 +69,6 @@ var modJsList = new Array();
 modJsList['tabDashboard'] = new DashboardAdapter('Dashboard','Dashboard');
 
 var modJs = modJsList['tabDashboard'];
-
-$("#profileLink").attr("href",modJs.getCustomUrl('?g=admin&n=profiles&m=admin_Admin'));
-$("#usersLink").attr("href",modJs.getCustomUrl('?g=admin&n=users&m=admin_System'));
-$("#settingsLink").attr("href",modJs.getCustomUrl('?g=admin&n=settings&m=admin_System'));
-
-modJs.getInitData();
 
 </script>
 <?php include APP_BASE_PATH.'footer.php';?>      

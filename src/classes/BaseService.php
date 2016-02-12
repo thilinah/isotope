@@ -1,20 +1,20 @@
 <?php
 
 /*
-This file is a part of Isotope Framework.
+This file is part of Ice Framework.
 
-Isotope Framework is free software: you can redistribute it and/or modify
+Ice Framework is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-Isotope Framework is distributed in the hope that it will be useful,
+Ice Framework is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Isotope Framework. If not, see <http://www.gnu.org/licenses/>.
+along with Ice Framework. If not, see <http://www.gnu.org/licenses/>.
 
 ------------------------------------------------------------------
 
@@ -1035,6 +1035,37 @@ class BaseService{
 		
 		return $arr;
 	}
+
+    public function isModuleAllowedForUser($moduleManagerObj){
+        $moduleObject = $moduleManagerObj->getModuleObject();
+
+        //Check if the module is disabled
+        if($moduleObject['status'] == 'Disabled'){
+            return false;
+        }
+
+        //Check if user has permissions to this module
+        //Check Module Permissions
+        $modulePermissions = BaseService::getInstance()->loadModulePermissions($moduleManagerObj->getModuleType(), $moduleObject['name'],BaseService::getInstance()->getCurrentUser()->user_level);
+
+
+        if(!in_array(BaseService::getInstance()->getCurrentUser()->user_level, $modulePermissions['user'])){
+
+            if(!empty(BaseService::getInstance()->getCurrentUser()->user_roles)){
+                $userRoles = json_decode(BaseService::getInstance()->getCurrentUser()->user_roles,true);
+            }else{
+                $userRoles = array();
+            }
+            $commonRoles = array_intersect($modulePermissions['user_roles'], $userRoles);
+            if(empty($commonRoles)){
+                return false;
+            }
+
+        }
+
+        return true;
+
+    }
 	
 	public function getGAKey(){
 		return SettingsManager::getInstance()->getSetting('Analytics: Google Key');

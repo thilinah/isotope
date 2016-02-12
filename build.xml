@@ -8,7 +8,7 @@
     <property environment="env"/>
     <property name="env.appname" value="isotope"/>
     <property name="env.version" value="dev"/>
-    <property name="installpath" value="/tmp/isotope-install/isotope-core"/>
+    <property name="installpath" value="/Applications/XAMPP/xamppfiles/htdocs/isotope-core"/>
 
 
     <target name="build"

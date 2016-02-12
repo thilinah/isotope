@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is a part of Isotope Framework.
+ * This file is part of Ice Framework.
  * Copyright Thilina Hasantha (thilina.hasantha[at]gmail.com | http://facebook.com/thilinah | https://twitter.com/thilina84)
  * Licensed under MIT (https://github.com/thilinah/ice-framework/master/LICENSE)
  */

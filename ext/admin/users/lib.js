@@ -34,8 +34,10 @@ UserAdapter.method('getFormFields', function() {
 	        [ "id", {"label":"ID","type":"hidden","validation":""}],
 	        [ "username", {"label":"User Name","type":"text","validation":"username"}],
 	        [ "email", {"label":"Email","type":"text","validation":"email"}],
-	        [ "profile", {"label":"Profile","type":"select","allow-null":true,"remote-source":["Profile","id","first_name+last_name"]}],
-	        [ "user_level", {"label":"User Level","type":"select","source":[["Admin","Admin"],["Manager","Manager"],["Profile","Profile"]]}]
+	        [ "profile", {"label":"Profile","type":"select2","allow-null":true,"remote-source":["Profile","id","first_name+last_name"]}],
+	        [ "user_level", {"label":"User Level","type":"select","source":[["Admin","Admin"],["Manager","Manager"],["Profile","Profile"],["Other","Other"]]}],
+            [ "user_roles", {"label":"User Roles","type":"select2multi","remote-source":["UserRole","id","name"]}],
+            [ "default_module", {"label":"Default Module","type":"select2","null-label":"No Default Module","allow-null":true,"remote-source":["Module","id","menu+label"]}]
 	];
 });
 
@@ -62,9 +64,9 @@ UserAdapter.method('saveUserFailCallBack', function(callBackData,serverData) {
 
 UserAdapter.method('doCustomValidation', function(params) {
 	var msg = null;
-	if(params['user_level'] != "Admin" && params['profile'] == "NULL"){
-		msg = "For non Admin users, you have to assign a profile when adding or editing the user.<br/>";
-		msg += " You may create a new profile through 'Admin'->'Profiless' menu";
+	if((params['user_level'] != "Admin" && params['user_level'] != "Other") && params['profile'] == "NULL"){
+		msg = "For this user type, you have to assign an profile when adding or editing the user.<br/>";
+		msg += " You may create a new profile through 'Admin'->'Profiles' menu";
 	}
 	return msg;
 });
@@ -157,3 +159,40 @@ UserAdapter.method('changePasswordFailCallBack', function(callBackData,serverDat
 
 
 
+
+/**
+ * UserRoleAdapter
+ */
+
+function UserRoleAdapter(endPoint,tab,filter,orderBy) {
+    this.initAdapter(endPoint,tab,filter,orderBy);
+}
+
+UserRoleAdapter.inherits(AdapterBase);
+
+
+
+UserRoleAdapter.method('getDataMapping', function() {
+    return [
+        "id",
+        "name"
+    ];
+});
+
+UserRoleAdapter.method('getHeaders', function() {
+    return [
+        { "sTitle": "ID" ,"bVisible":false},
+        { "sTitle": "Name"}
+    ];
+});
+
+UserRoleAdapter.method('getFormFields', function() {
+    return [
+        [ "id", {"label":"ID","type":"hidden"}],
+        [ "name", {"label":"Name","type":"text","validation":""}]
+    ];
+});
+
+UserRoleAdapter.method('postRenderForm', function(object, $tempDomObj) {
+    $tempDomObj.find("#changePasswordBtn").remove();
+});

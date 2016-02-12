@@ -705,7 +705,7 @@ INSERT INTO `Settings` (`name`, `value`, `description`, `meta`) VALUES
 
 
 INSERT INTO `Profiles` (`id`, `first_name`, `last_name`, `nationality`, `birthday`, `gender`, `marital_status`, `address1`, `address2`, `city`, `country`, `province`, `postal_code`, `email`, `home_phone`, `mobile_phone`, `supervisor`, `created`, `updated`) VALUES
-(1,'Isotope Framework', 'Profile', 35, '1984-03-17 18:30:00', 'Male', 'Married', '2772 Flynn Street', 'Willoughby', 'Willoughby', 'US', 41, '44094', 'gamonoid+iceframework@gamonoid.com', '440-953-4578', '440-953-4578', NULL, NOW(), NOW());
+(1,'Ice Framework', 'Profile', 35, '1984-03-17 18:30:00', 'Male', 'Married', '2772 Flynn Street', 'Willoughby', 'Willoughby', 'US', 41, '44094', 'gamonoid+iceframework@gamonoid.com', '440-953-4578', '440-953-4578', NULL, NOW(), NOW());
 
 INSERT INTO `Users` VALUES 
 (1,'admin','icef+admin@web-stalk.com','21232f297a57a5a743894a0e4a801fc3',1,'Admin',NOW(),NOW(),NOW(),NOW());

@@ -18,7 +18,7 @@ ModuleAdapter.inherits(AdapterBase);
 ModuleAdapter.method('getDataMapping', function() {
 	return [
 	        "id",
-	        "name",
+	        "label",
 	        "menu",
 	        "mod_group",
 	        "mod_order",
@@ -44,8 +44,10 @@ ModuleAdapter.method('getHeaders', function() {
 ModuleAdapter.method('getFormFields', function() {
 	return [
 	        [ "id", {"label":"ID","type":"hidden"}],
-	        [ "name", {"label":"Name","type":"text","validation":""}],
-	        [ "status", {"label":"Status","type":"select","source":[["Enabled","Enabled"],["Disabled","Disabled"]]}]
+	        [ "label", {"label":"Label","type":"text","validation":""}],
+	        [ "status", {"label":"Status","type":"select","source":[["Enabled","Enabled"],["Disabled","Disabled"]]}],
+            [ "user_levels", {"label":"User Levels","type":"select2multi","source":[["Admin","Admin"],["Manager","Manager"],["Profile","Profile"],["Other","Other"]]}],
+            [ "user_roles", {"label":"User Roles","type":"select2multi","remote-source":["UserRole","id","name"]}]
 	];
 });
 
@@ -58,8 +60,7 @@ ModuleAdapter.method('getActionButtonsHtml', function(id,data) {
 	nonEditableFields["admin_Manage Modules"] = 1;
 	nonEditableFields["admin_Settings"] = 1;
 	nonEditableFields["admin_Users"] = 1;
-	
-	nonEditableFields["user_Profile"] = 1;
+
 	
 	if(nonEditableFields[data[3]+"_"+data[1]] == 1){
 		return "";

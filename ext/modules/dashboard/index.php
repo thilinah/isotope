@@ -27,24 +27,31 @@ include APP_BASE_PATH.'header.php';
 include APP_BASE_PATH.'modulejslibs.inc.php';
 ?><div class="span9">
 			  
-	<div class="row">						                        
-		<div class="col-lg-3 col-xs-6">
-			<!-- small box -->
-			<div class="small-box bg-green">
-				<div class="inner">
-					<h3 >Last login</h3>
-					<p id="lastLoginTime">
-						
-					</p>
-				</div>
-				<div class="icon">
-					<i class="ion ion-calendar"></i>
-				</div>
-				<a href="#" class="small-box-footer" id="profileLink">
-					Goto Profile <i class="fa fa-arrow-circle-right"></i>
-				</a>
-			</div>
-		</div><!-- ./col -->
+	<div class="row">
+        <?php
+        $moduleManagers = BaseService::getInstance()->getModuleManagers();
+        $dashBoardList = array();
+        foreach($moduleManagers as $moduleManagerObj){
+
+            $allowed = BaseService::getInstance()->isModuleAllowedForUser($moduleManagerObj);
+
+            if(!$allowed){
+                continue;
+            }
+
+            $item = $moduleManagerObj->getDashboardItem();
+            if(!empty($item)) {
+                $index = $moduleManagerObj->getDashboardItemIndex();
+                $dashBoardList[$index] = $item;
+            }
+        }
+
+        ksort($dashBoardList);
+
+        foreach($dashBoardList as $k=>$v){
+            echo $v;
+        }
+        ?>
 		                    
 	</div>
 
@@ -55,10 +62,6 @@ var modJsList = new Array();
 modJsList['tabDashboard'] = new DashboardAdapter('Dashboard','Dashboard');
 
 var modJs = modJsList['tabDashboard'];
-
-$("#profileLink").attr("href",modJs.getCustomUrl('?g=modules&n=profile'));
-
-modJs.getLastLogin();
 
 </script>
 <?php include APP_BASE_PATH.'footer.php';?>      

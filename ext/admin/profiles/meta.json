@@ -4,7 +4,7 @@
 "order":"1",
 "icon":"fa-users",
 "user_levels":["Admin"],
-
+  "dashboardPosition":1,
 "permissions":
 	{
 	}

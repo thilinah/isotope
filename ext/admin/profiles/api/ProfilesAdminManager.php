@@ -18,6 +18,19 @@ if (!class_exists('ProfilesAdminManager')) {
 			$this->addModelClass('Profile');
 		}
 
+        public function getDashboardItemData(){
+            $data = array();
+            $emp = new Profile();
+            $data['numberOfProfiles'] = $emp->Count("1 = 1");
+
+            return $data;
+
+        }
+
+        public function initQuickAccessMenu(){
+            UIManager::getInstance()->addQuickAccessMenuItem("View Profiles","fa-users",CLIENT_BASE_URL."?g=admin&n=profiles&m=admin_Profiles",array("Admin"));
+        }
+
 	}
 }
 

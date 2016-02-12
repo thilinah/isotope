@@ -169,3 +169,60 @@ ProfileAdapter.method('modProfileGetFailCallBack' , function(data) {
 ProfileAdapter.method('editProfile' , function() {
 	this.edit(this.currentUserId);
 });
+
+
+ProfileAdapter.method('changePassword', function() {
+    $('#adminUsersModel').modal('show');
+    $('#adminUsersChangePwd #newpwd').val('');
+    $('#adminUsersChangePwd #conpwd').val('');
+});
+
+ProfileAdapter.method('changePasswordConfirm', function() {
+    $('#adminUsersChangePwd_error').hide();
+
+    var passwordValidation =  function (str) {
+        var val = /^[a-zA-Z0-9]\w{6,}$/;
+        return str != null && val.test(str);
+    };
+
+    var password = $('#adminUsersChangePwd #newpwd').val();
+
+    if(!passwordValidation(password)){
+        $('#adminUsersChangePwd_error').html("Password may contain only letters, numbers and should be longer than 6 characters");
+        $('#adminUsersChangePwd_error').show();
+        return;
+    }
+
+    var conPassword = $('#adminUsersChangePwd #conpwd').val();
+
+    if(conPassword != password){
+        $('#adminUsersChangePwd_error').html("Passwords don't match");
+        $('#adminUsersChangePwd_error').show();
+        return;
+    }
+
+    var req = {"pwd":conPassword};
+    var reqJson = JSON.stringify(req);
+
+    var callBackData = [];
+    callBackData['callBackData'] = [];
+    callBackData['callBackSuccess'] = 'changePasswordSuccessCallBack';
+    callBackData['callBackFail'] = 'changePasswordFailCallBack';
+
+    this.customAction('changePassword','modules=employees',reqJson,callBackData);
+
+});
+
+ProfileAdapter.method('closeChangePassword', function() {
+    $('#adminUsersModel').modal('hide');
+});
+
+ProfileAdapter.method('changePasswordSuccessCallBack', function(callBackData,serverData) {
+    this.closeChangePassword();
+    this.showMessage("Password Change","Password changed successfully");
+});
+
+ProfileAdapter.method('changePasswordFailCallBack', function(callBackData,serverData) {
+    this.closeChangePassword();
+    this.showMessage("Error",callBackData);
+});

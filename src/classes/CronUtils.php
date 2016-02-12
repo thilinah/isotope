@@ -23,11 +23,14 @@ class CronUtils{
 		$count = 0;
 		foreach($ams as $am){
 			if(is_dir($this->clientBasePath.$am) && $am != '.' && $am != '..'){
+                $command = 	"php ".$this->clientBasePath.$am."/".$this->cronFile;
                 if(file_exists($this->clientBasePath.$am."/".$this->cronFile)){
-                    $command = 	"php ".$this->clientBasePath.$am."/".$this->cronFile;
+
                     echo "Run:".$command."\r\n";
+                    error_log("Run:".$command);
                     passthru($command, $res);
                     echo "Result :".$res."\r\n";
+                    error_log("Result :".$res);
 
                     $count++;
                     if($count > 25){
@@ -36,6 +39,7 @@ class CronUtils{
                     }
                 }else{
                     echo "Error (File Not Found):".$command."\r\n";
+                    error_log("Error (File Not Found):".$command);
                 }
 
 			}

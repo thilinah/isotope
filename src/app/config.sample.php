@@ -1,9 +1,9 @@
 <?php 
 ini_set('error_log', '_LOG_');
 
-define('APP_NAME', 'Isotope Framework');
-define('FB_URL', 'Isotope Framework');
-define('TWITTER_URL', 'Isotope Framework');
+define('APP_NAME', 'Ice Framework');
+define('FB_URL', 'Ice Framework');
+define('TWITTER_URL', 'Ice Framework');
 
 define('CLIENT_NAME', '_CLIENT_');
 define('APP_BASE_PATH', '_APP_BASE_PATH_');

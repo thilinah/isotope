@@ -816,7 +816,7 @@ INSERT INTO `Settings` (`name`, `value`, `description`, `meta`) VALUES
 ('Social Signin: Google Enabled', '0',  '','["value", {"label":"Value","type":"select","source":[["0","No"],["1","Yes"]]}]'),
 ('Social Signin: Google Client Id', '0', '',''),
 ('Social Signin: Google Client Secret', '0', '',''),
-('Social Signin: Linkedin Enabled', '0',  '','["value", {"label":"Value","type":"select","source":[["0","No"],["1","Yes"]]}]'),
+('Social Signin: Linkedin Enabled', '0',  '','["value", {"label":"Value","type":"select","source":[["0","No"],["1","Yes"]]}]');
 
 
 
@@ -824,4 +824,4 @@ INSERT INTO `Profiles` (`id`, `first_name`, `last_name`, `nationality`, `birthda
 (1,'Isotope Framework', 'Profile', 35, '1984-03-17 18:30:00', 'Male', 'Married', '2772 Flynn Street', 'Willoughby', 'Willoughby', 'US', 41, '44094', 'gamonoid+iceframework@gamonoid.com', '440-953-4578', '440-953-4578', NULL, NOW(), NOW());
 
 INSERT INTO `Users` VALUES 
-(1,'admin','icef+admin@web-stalk.com','21232f297a57a5a743894a0e4a801fc3',1,'Admin',NULL,NOW(),NOW(),NOW(),NOW());
+(1,'admin','icef+isotope@web-stalk.com','21232f297a57a5a743894a0e4a801fc3',1,'Admin',NULL,NOW(),NOW(),NOW(),NOW());

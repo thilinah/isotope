@@ -1,19 +1,19 @@
 <?php
 /*
-This file is a part of Isotope Framework.
+This file is part of Ice Framework.
 
-Isotope Framework is free software: you can redistribute it and/or modify
+Ice Framework is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-Isotope Framework is distributed in the hope that it will be useful,
+Ice Framework is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Isotope Framework. If not, see <http://www.gnu.org/licenses/>.
+along with Ice Framework. If not, see <http://www.gnu.org/licenses/>.
 
 ------------------------------------------------------------------
 
@@ -179,7 +179,7 @@ include('configureUIManager.php');
 
 <header id="delegationDiv" class="header">
     <a href="<?=$homeLink?>" class="logo" style="overflow: hidden;font-family: 'Source Sans Pro', sans-serif;">
-        <?=$companyName?>
+        Home
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top" role="navigation">
@@ -190,6 +190,9 @@ include('configureUIManager.php');
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </a>
+        <div class="logo" style="background: #3c8dbc;text-align: left;width:50%;">
+            <?=$companyName?>
+        </div>
         <div class="navbar-right">
             <ul class="nav navbar-nav">
                 <?=UIManager::getInstance()->getMenuItemsHTML();?>
@@ -205,7 +208,7 @@ include('configureUIManager.php');
     top: 0;
     left: 0;
     z-index: 9999;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0);
     background-image: url('<?=BASE_URL?>images/icehrm-loader.gif');
     background-repeat: no-repeat;
     background-position: center;display:none;"></div>
