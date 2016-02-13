@@ -9,16 +9,16 @@ destination: ../doc_outputs/mydoc/designers
 topnav_title: Jekyll Documentation Theme
 homepage_title: Jekyll doc theme for designers
 site_title: Jekyll theme for designers
-project_folder: mydoc
-company_name: Your company
+project_folder: documentation
+company_name: Gamonoid Media
 footer_image_location: ../common_images/company_logo.png
-github_editme_path: tomjohnson1492/documentation-theme-jekyll/edit/reviews
+github_editme_path:
 disqus_shortname: idrbwjekyll
 # variables
 
 
 sidebar_tagline: Isotope
-sidebar_version: Version 4.0
+sidebar_version: Version 2.0
 theme_file: theme-blue.css
 pdf_file_name: mydoc_designers_pdf.pdf
 
