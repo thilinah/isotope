@@ -804,6 +804,7 @@ INSERT INTO `Settings` (`name`, `value`, `description`, `meta`) VALUES
 ('Files: Amazone S3 Secret for File Upload', '',  'Please provide S3 Secret for uploading files',''),
 ('Files: S3 Bucket', '',  'Please provide S3 Bucket name for uploading files',''),
 ('Files: S3 Web Url', '',  'Please provide Url to the s3 bucket',''),
+
 ('Api: REST Api Enabled', '0',  '','["value", {"label":"Value","type":"select","source":[["0","No"],["1","Yes"]]}]'),
 ('Social Signin: Create User', '0',  '','["value", {"label":"Value","type":"select","source":[["0","No"],["1","Yes"]]}]'),
 ('Social Signin: Create User Level', 'Profile',  '','["value", {"label":"Value","type":"select","source":[["Profile","Profile"],["Manager","Manager"]]}]'),
@@ -818,7 +819,8 @@ INSERT INTO `Settings` (`name`, `value`, `description`, `meta`) VALUES
 ('Social Signin: Google Client Secret', '0', '',''),
 ('Social Signin: Linkedin Enabled', '0',  '','["value", {"label":"Value","type":"select","source":[["0","No"],["1","Yes"]]}]');
 
-
+INSERT INTO `Settings` (`name`, `value`, `description`, `meta`) VALUES
+('UI: Theme', '',  'Name of the theme to use','');
 
 INSERT INTO `Profiles` (`id`, `first_name`, `last_name`, `nationality`, `birthday`, `gender`, `marital_status`, `address1`, `address2`, `city`, `country`, `province`, `postal_code`, `email`, `home_phone`, `mobile_phone`, `supervisor`, `created`, `updated`) VALUES
 (1,'Isotope Framework', 'Profile', 35, '1984-03-17 18:30:00', 'Male', 'Married', '2772 Flynn Street', 'Willoughby', 'Willoughby', 'US', 41, '44094', 'gamonoid+iceframework@gamonoid.com', '440-953-4578', '440-953-4578', NULL, NOW(), NOW());

@@ -16,7 +16,7 @@
             description=""/>
 
     <target name="buildlocal"
-            depends="prepare,copyapp"
+            depends="prepare,copyapp,install"
             description=""/>
 
     <target name="clean"
@@ -58,6 +58,12 @@
 
         <copy todir="${buildroot}/src/lib" overwrite="true">
             <fileset dir="${buildroot}/lib">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
+
+        <copy todir="${buildroot}/src/www" overwrite="true">
+            <fileset dir="${buildroot}/www">
                 <include name="**/*"/>
             </fileset>
         </copy>

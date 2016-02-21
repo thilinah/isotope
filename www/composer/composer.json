@@ -1,0 +1,15 @@
+{
+    "name": "AlterJs.com",
+    "description": "",
+    "type": "Web Application",
+    "require": {
+        "twig/twig": "1.23.*"
+    },
+    "license": "Commercial",
+    "authors": [
+        {
+            "name": "Thilina Haantha",
+            "email": "thilina.hasantha@gmail.com"
+        }
+    ]
+}
