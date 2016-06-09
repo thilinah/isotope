@@ -66,7 +66,7 @@ $logoFileUrl = UIManager::getInstance()->getCompanyLogoUrl();
     <!-- Le styles -->
     <link href="<?=BASE_URL?>bootstrap/css/bootstrap.css" rel="stylesheet">
 	
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.js"></script>
+	<script type="text/javascript" src="<?=BASE_URL?>js/jquery-1.8.1.js"></script>
     <script src="<?=BASE_URL?>bootstrap/js/bootstrap.js"></script>
 	<script src="<?=BASE_URL?>js/jquery.placeholder.js"></script>
 	<script src="<?=BASE_URL?>js/jquery.dataTables.js"></script>
@@ -143,7 +143,7 @@ $logoFileUrl = UIManager::getInstance()->getCompanyLogoUrl();
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', '<?=BaseService::getInstance()->getGAKey()?>', 'gamonoid.com');
+  ga('create', '<?=BaseService::getInstance()->getGAKey()?>', 'your-company-domain.com');
   ga('send', 'pageview');
 
   </script>

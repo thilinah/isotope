@@ -16,7 +16,7 @@ along with Ice Framework. If not, see <http://www.gnu.org/licenses/>.
 
 ------------------------------------------------------------------
 
-Original work Copyright (c) 2012 [Gamonoid Media Pvt. Ltd]  
+Original work Copyright (c) 2012   
 Developer: Thilina Hasantha (thilina.hasantha[at]gmail.com / facebook.com/thilinah)
  */
 
@@ -82,7 +82,7 @@ function FormValidation(formId,validateAll,options) {
 			}, 
 			
 			username: function (str) {  
-				var username = /^[a-zA-Z0-9]+$/;  
+				var username = /^[a-zA-Z0-9\.-]+$/;
 				return str != null && username.test(str);  
 			}, 
 			

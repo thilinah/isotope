@@ -65,6 +65,10 @@ abstract class AbstractModuleManager{
 	 */
 	public abstract function setupModuleClassDefinitions();
 
+	public function initCalculationHooks(){
+		
+	}
+
     public function initQuickAccessMenu(){
 
     }
@@ -192,6 +196,24 @@ abstract class AbstractModuleManager{
 	
 	protected function addModelClass($className){
 		$this->modelClasses[] = $className;
+	}
+
+    protected function addHistoryGeneric($type, $table, $refName, $refId, $field, $oldValue, $newValue){
+        $eh = new $table();
+        $eh->type = $type;
+        $eh->$refName = $refId;
+        $eh->field = $field;
+        $eh->user = BaseService::getInstance()->getCurrentUser()->id;
+        $eh->old_value = $oldValue;
+        $eh->new_value = $newValue;
+        $eh->created = date("Y-m-d H:i:s");
+        $eh->updated = date("Y-m-d H:i:s");
+
+        $eh->Save();
+    }
+	
+	public function addCalculationHook($code, $name, $class, $method){
+		BaseService::getInstance()->addCalculationHook($code, $name, $class, $method);
 	}
 
 

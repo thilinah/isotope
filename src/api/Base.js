@@ -16,7 +16,7 @@ along with Ice Framework. If not, see <http://www.gnu.org/licenses/>.
 
 ------------------------------------------------------------------
 
-Original work Copyright (c) 2012 [Gamonoid Media Pvt. Ltd]  
+Original work Copyright (c) 2012   
 Developer: Thilina Hasantha (thilina.hasantha[at]gmail.com / facebook.com/thilinah)
  */
 
@@ -39,6 +39,7 @@ function IceHRMBase() {
 	this.filtersAlreadySet = false;
 	this.currentFilterString = "";
     this.sorting = 0;
+	this.settings = {};
 }
 
 this.fieldTemplates = null;
@@ -268,6 +269,10 @@ IceHRMBase.method('setShowFormOnPopup' , function(val) {
 
 IceHRMBase.method('setRemoteTable' , function(val) {
 	this.createRemoteTable = val;
+});
+
+IceHRMBase.method('setSettings' , function(val) {
+	this.settings = val;
 });
 
 IceHRMBase.method('getRemoteTable' , function() {
@@ -677,6 +682,10 @@ IceHRMBase.method('getFilters', function() {
 IceHRMBase.method('edit', function(id) {
 	this.currentId = id;
 	this.getElement(id,[]);
+});
+
+IceHRMBase.method('copyRow', function(id) {
+	this.getElement(id,[],true);
 });
 
 IceHRMBase.method('renderModel', function(id,header,body) {
@@ -1355,7 +1364,7 @@ IceHRMBase.method('dataGroupToHtml', function(val, field) {
 		
 		for(key in item){
 			itemVal = item[key];
-			if(itemVal != undefined && itemVal != null){
+			if(itemVal != undefined && itemVal != null && typeof itemVal == "string"){
 				itemVal = itemVal.replace(/(?:\r\n|\r|\n)/g, '<br />');
 			}
 			t = t.replace('#_'+key+'_#', itemVal);
@@ -1678,7 +1687,10 @@ IceHRMBase.method('fillForm', function(object, formId, fields) {
 			if(placeHolderVal == undefined || placeHolderVal == null){
 				placeHolderVal = "";
 			}else{
-				placeHolderVal = placeHolderVal.replace(/(?:\r\n|\r|\n)/g, '<br />');
+                try{
+                    placeHolderVal = placeHolderVal.replace(/(?:\r\n|\r|\n)/g, '<br />');
+                }catch(e){}
+
 			}
 			
 			
@@ -1722,7 +1734,10 @@ IceHRMBase.method('fillForm', function(object, formId, fields) {
 			}
 			
 			$(formId + ' #'+fields[i][0]).select2('val',msVal);
-		
+			var select2Height = $(formId + ' #'+fields[i][0]).find(".select2-choices").height();
+			$(formId + ' #'+fields[i][0]).find(".controls").css('min-height', select2Height+"px");
+			$(formId + ' #'+fields[i][0]).css('min-height', select2Height+"px");
+
 		}else if(fields[i][1].type == 'datagroup'){
 			try{
 				var html = this.dataGroupToHtml(object[fields[i][0]],fields[i]);
@@ -1761,7 +1776,13 @@ IceHRMBase.method('renderFormField', function(field) {
 	}
 	var t = this.fieldTemplates[field[1].type];
 	if(field[1].validation != "none" &&  field[1].validation != "emailOrEmpty" && field[1].validation != "numberOrEmpty" && field[1].type != "placeholder" && field[1].label.indexOf('*') < 0){
-		field[1].label = field[1].label + '<font class="redFont">*</font>';
+		var tempSelectBoxes = ['select','select2'];
+		if(tempSelectBoxes.indexOf(field[1].type) >= 0 && field[1]['allow-null'] == true){
+
+		}else{
+			field[1].label = field[1].label + '<font class="redFont">*</font>';
+		}
+
 	}
 	if(field[1].type == 'text' || field[1].type == 'textarea' || field[1].type == 'hidden' || field[1].type == 'label' || field[1].type == 'placeholder'){
 		t = t.replace(/_id_/g,field[0]);
@@ -2037,8 +2058,15 @@ IceHRMBase.method('getActionButtons', function(obj) {
 IceHRMBase.method('getActionButtonsHtml', function(id,data) {	
 	var editButton = '<img class="tableActionButton" src="_BASE_images/edit.png" style="cursor:pointer;" rel="tooltip" title="Edit" onclick="modJs.edit(_id_);return false;"></img>';
 	var deleteButton = '<img class="tableActionButton" src="_BASE_images/delete.png" style="margin-left:15px;cursor:pointer;" rel="tooltip" title="Delete" onclick="modJs.deleteRow(_id_);return false;"></img>';
-	var html = '<div style="width:80px;">_edit__delete_</div>';
-	
+	var cloneButton = '<img class="tableActionButton" src="_BASE_images/clone.png" style="margin-left:15px;cursor:pointer;" rel="tooltip" title="Copy" onclick="modJs.copyRow(_id_);return false;"></img>';
+	var html = '<div style="width:80px;">_edit__delete__clone_</div>';
+
+	if(this.showAddNew){
+		html = html.replace('_clone_',cloneButton);
+	}else{
+		html = html.replace('_clone_','');
+	}
+
 	if(this.showDelete){
 		html = html.replace('_delete_',deleteButton);
 	}else{
@@ -2160,3 +2188,12 @@ IceHRMBase.method('generateOptions', function (data) {
 
     return options;
 });
+
+IceHRMBase.method('isModuleInstalled', function (type, name) {
+    if(modulesInstalled == undefined || modulesInstalled == null){
+        return false;
+    }
+
+    return (modulesInstalled[type+"_"+name] == 1);
+});
+

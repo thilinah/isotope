@@ -10,8 +10,8 @@ define('TWITTER_URL', 'Isotope Framework');
 define('CLIENT_NAME', 'app');
 define('APP_BASE_PATH', dirname(__FILE__).'/../src/');
 define('CLIENT_BASE_PATH', APP_BASE_PATH.'app/');
-define('BASE_URL','http://apps.gamonoid.com/ice-framework/');
-define('CLIENT_BASE_URL','http://apps.gamonoid.com/ice-framework/app/');
+define('BASE_URL','http://apps.your-company-domain.com/ice-framework/');
+define('CLIENT_BASE_URL','http://apps.your-company-domain.com/ice-framework/app/');
 
 define('APP_DB', 'icef_sample_db_test');
 define('APP_USERNAME', MYSQL_ROT_USER);

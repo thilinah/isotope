@@ -7,7 +7,7 @@
     <property environment="env"/>
     <property name="env.appname" value="isotope"/>
     <property name="env.version" value="dev"/>
-    <property name="installpath" value="/var/www/apps.gamonoid.com/isotope-core"/>
+    <property name="installpath" value="/var/www/apps.your-company-domain.com/isotope-core"/>
 
 
     <target name="build"

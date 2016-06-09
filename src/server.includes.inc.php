@@ -26,6 +26,7 @@ $user = SessionUtils::getSessionObject('user');
 
 include (APP_BASE_PATH."classes/BaseService.php");
 include (APP_BASE_PATH."classes/CronUtils.php");
+include (APP_BASE_PATH."classes/LDAPManager.php");
 include (APP_BASE_PATH."classes/FileService.php");
 include (APP_BASE_PATH."classes/SubActionManager.php");
 include (APP_BASE_PATH."classes/AbstractInitialize.php");
@@ -39,6 +40,7 @@ include (APP_BASE_PATH."classes/UIManager.php");
 include (APP_BASE_PATH."classes/RestApiManager.php");
 include (APP_BASE_PATH."classes/ModuleBuilder.php");
 include (APP_BASE_PATH."classes/SimpleImage.php");
+include (APP_BASE_PATH."classes/Macaw.php");
 include (APP_BASE_PATH."classes/crypt/Aes.php");
 include (APP_BASE_PATH."classes/crypt/AesCtr.php");
 
@@ -112,7 +114,8 @@ if(defined('CLIENT_PATH')){
 		$moduleManagerObj->setupUserClasses($userTables);
 		$moduleManagerObj->setupFileFieldMappings($fileFields);
 		$moduleManagerObj->setupErrorMappings($mysqlErrors);
-		$moduleManagerObj->setupRestEndPoints();
+		//$moduleManagerObj->setupRestEndPoints();
+		$moduleManagerObj->initCalculationHooks();
 		
 		$modelClassList = $moduleManagerObj->getModelClasses();
 		

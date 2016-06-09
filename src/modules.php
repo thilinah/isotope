@@ -23,6 +23,12 @@ if(SettingsManager::getInstance()->getSetting("System: Add New Permissions") == 
 	SettingsManager::getInstance()->setSetting("System: Add New Permissions","0");
 }
 
+$resetModuleNames = false;
+if(SettingsManager::getInstance()->getSetting("System: Reset Module Names") == "1"){
+	$resetModuleNames = true;
+	SettingsManager::getInstance()->setSetting("System: Reset Module Names","0");
+}
+
 function includeModuleManager($type,$name,$data){
 	$moduleCapsName = ucfirst($name);
 	$moduleTypeCapsName = ucfirst($type); // Admin or Modules
@@ -103,11 +109,13 @@ foreach($ams as $am){
 			if($addNewPermissions && isset($meta->permissions)){
 				createPermissions($meta, $dbModule->id);
 			}
-			
-			if($dbModule->status == 'Disabled'){
-				continue;	
-			}
 
+			if($resetModuleNames){
+				$dbModule->label = $arr['label'];
+				$dbModule->menu = $arr['menu'];
+				$dbModule->icon = $arr['icon'];
+				$dbModule->Save();
+			}
 
             $arr['name'] = $dbModule->name;
             $arr['label'] = $dbModule->label;
@@ -140,6 +148,9 @@ foreach($ams as $am){
 		}
 
         includeModuleManager('admin',$am, $arr);
+        if($dbModule->status == 'Disabled'){
+            continue;
+        }
 		
 		if(!isset($adminModulesTemp[$arr['menu']])){
 			$adminModulesTemp[$arr['menu']] = array();	
@@ -191,9 +202,12 @@ foreach($ams as $am){
 			if($addNewPermissions && isset($meta->permissions)){
 				createPermissions($meta, $dbModule->id);
 			}
-			
-			if($dbModule->status == 'Disabled'){
-				continue;
+
+			if($resetModuleNames){
+				$dbModule->label = $arr['label'];
+				$dbModule->menu = $arr['menu'];
+				$dbModule->icon = $arr['icon'];
+				$dbModule->Save();
 			}
 
             $arr['name'] = $dbModule->name;
@@ -226,6 +240,10 @@ foreach($ams as $am){
 		}
 
         includeModuleManager('modules',$am, $arr);
+
+        if($dbModule->status == 'Disabled'){
+            continue;
+        }
 		
 		if(!isset($userModulesTemp[$arr['menu']])){
 			$userModulesTemp[$arr['menu']] = array();	

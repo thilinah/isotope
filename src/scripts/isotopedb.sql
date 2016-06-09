@@ -75,7 +75,8 @@ create table `Users` (
 	`email` varchar(100) default null,
 	`password` varchar(100) default null,
 	`profile` bigint(20) null,
-	`user_level` enum('Admin','Profile','Manager') default NULL,
+	`default_module` bigint(20) null,
+	`user_level` enum('Admin','Profile','Manager','Other') default NULL,
 	`user_roles` text null,
 	`last_login` DATETIME default '0000-00-00 00:00:00',
 	`last_update` DATETIME default '0000-00-00 00:00:00',
@@ -85,6 +86,7 @@ create table `Users` (
 	primary key  (`id`),
 	unique key `username` (`username`)
 ) engine=innodb default charset=utf8;
+
 
 create table `UserRoles` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,

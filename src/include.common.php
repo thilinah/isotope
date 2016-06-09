@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors', false);
 error_reporting(E_ERROR);
 require dirname(__FILE__).'/composer/vendor/autoload.php';
 
@@ -12,6 +13,7 @@ include (APP_BASE_PATH."utils/SessionUtils.php");
 include (APP_BASE_PATH."utils/InputCleaner.php");
 include (APP_BASE_PATH."utils/LogManager.php");
 include (APP_BASE_PATH."utils/CalendarTools.php");
+include (APP_BASE_PATH."utils/EvalMath.php");
 
 
 $_REQUEST = InputCleaner::cleanParameters($_REQUEST);

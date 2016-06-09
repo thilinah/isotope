@@ -17,7 +17,7 @@ along with Ice Framework. If not, see <http://www.gnu.org/licenses/>.
 
 ------------------------------------------------------------------
 
-Original work Copyright (c) 2012 [Gamonoid Media Pvt. Ltd]  
+Original work Copyright (c) 2012   
 Developer: Thilina Hasantha (thilina.hasantha[at]gmail.com / facebook.com/thilinah)
  */
 
@@ -47,6 +47,18 @@ class Setting extends ICEHRM_Record {
 	public function getUserAccess(){
 		return array();
 	}
+
+	public function postProcessGetElement($obj){
+		if($obj->name == 'Api: REST Api Token'){
+			$user = BaseService::getInstance()->getCurrentUser();
+			$dbUser = new User();
+			$dbUser->Load("id = ?",array($user->id));
+			$resp = RestApiManager::getInstance()->getAccessTokenForUser($dbUser);
+			$obj->value = $resp->getData();
+		}
+		return $obj;
+	}
+
 	var $_table = 'Settings';
 }
 
