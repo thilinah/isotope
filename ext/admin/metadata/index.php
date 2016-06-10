@@ -17,7 +17,7 @@ along with Ice Framework. If not, see <http://www.gnu.org/licenses/>.
 
 ------------------------------------------------------------------
 
-Original work Copyright (c) 2012   
+Original work Copyright (c) 2012 [Gamonoid Media Pvt. Ltd]  
 Developer: Thilina Hasantha (thilina.hasantha[at]gmail.com / facebook.com/thilinah)
  */
 
@@ -31,7 +31,6 @@ $moduleBuilder = new ModuleBuilder();
 $moduleBuilder->addModuleOrGroup(new ModuleTab('Country','Country','Countries','CountryAdapter','','',true));
 $moduleBuilder->addModuleOrGroup(new ModuleTab('Province','Province','Provinces','ProvinceAdapter','',''));
 $moduleBuilder->addModuleOrGroup(new ModuleTab('CurrencyType','CurrencyType','Currency Types','CurrencyTypeAdapter','',''));
-$moduleBuilder->addModuleOrGroup(new ModuleTab('Nationality','Nationality','Nationality','NationalityAdapter','',''));
 $moduleBuilder->addModuleOrGroup(new ModuleTab('Nationality','Nationality','Nationality','NationalityAdapter','',''));
 $moduleBuilder->addModuleOrGroup(new ModuleTab('Ethnicity','Ethnicity','Ethnicity','EthnicityAdapter','',''));
 $moduleBuilder->addModuleOrGroup(new ModuleTab('ImmigrationStatus','ImmigrationStatus','Immigration Status','ImmigrationStatusAdapter','',''));

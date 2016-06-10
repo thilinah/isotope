@@ -22,6 +22,7 @@ if (!class_exists('MetadataAdminManager')) {
 			$this->addModelClass('Nationality');
 			$this->addModelClass('ImmigrationStatus');
 			$this->addModelClass('Ethnicity');
+			$this->addModelClass('CalculationHook');
 		}
 		
 	}
@@ -41,6 +42,20 @@ if (!class_exists('Country')) {
 	
 		public function getAnonymousAccess(){
 			return array("get","element");
+		}
+
+		function Find($whereOrderBy,$bindarr=false,$pkeysArr=false,$extra=array()){
+			$allowedCountriesStr = SettingsManager::getInstance()->getSetting('System: Allowed Countries');
+			$allowedCountries = array();
+			if(!empty($allowedCountriesStr)){
+				$allowedCountries = json_decode($allowedCountriesStr,true);
+			}
+
+			if(!empty($allowedCountries)){
+				return parent::Find("id in (".implode(",",$allowedCountries).")" , array());
+			}
+
+			return parent::Find($whereOrderBy, $bindarr, $pkeysArr, $extra);
 		}
 	}	
 }
@@ -79,6 +94,20 @@ if (!class_exists('CurrencyType')) {
 		public function getAnonymousAccess(){
 			return array("get","element");
 		}
+
+		function Find($whereOrderBy,$bindarr=false,$pkeysArr=false,$extra=array()){
+			$allowedCountriesStr = SettingsManager::getInstance()->getSetting('System: Allowed Currencies');
+			$allowedCountries = array();
+			if(!empty($allowedCountriesStr)){
+				$allowedCountries = json_decode($allowedCountriesStr,true);
+			}
+
+			if(!empty($allowedCountries)){
+				return parent::Find("id in (".implode(",",$allowedCountries).")" , array());
+			}
+
+			return parent::Find($whereOrderBy, $bindarr, $pkeysArr, $extra);
+		}
 	}	
 }
 
@@ -98,6 +127,22 @@ if (!class_exists('Nationality')) {
 		public function getAnonymousAccess(){
 			return array("get","element");
 		}
+
+		function Find($whereOrderBy,$bindarr=false,$pkeysArr=false,$extra=array()){
+			$allowedCountriesStr = SettingsManager::getInstance()->getSetting('System: Allowed Nationality');
+			$allowedCountries = array();
+			if(!empty($allowedCountriesStr)){
+				$allowedCountries = json_decode($allowedCountriesStr,true);
+			}
+
+			if(!empty($allowedCountries)){
+				return parent::Find("id in (".implode(",",$allowedCountries).")" , array());
+			}
+
+			return parent::Find($whereOrderBy, $bindarr, $pkeysArr, $extra);
+		}
+
+
 	}
 }
 
@@ -137,6 +182,50 @@ if (!class_exists('Ethnicity')) {
             return array("get","element");
         }
     }
+}
+
+if (!class_exists('CalculationHook')) {
+    class CalculationHook extends ICEHRM_Record {
+        var $_table = 'CalculationHooks';
+
+        public function getAdminAccess(){
+            return array("get","element","save","delete");
+        }
+
+        public function getUserAccess(){
+            return array();
+        }
+
+        public function getAnonymousAccess(){
+            return array("get","element");
+        }
+
+		function Find($whereOrderBy,$bindarr=false,$pkeysArr=false,$extra=array()){
+			return BaseService::getInstance()->getCalculationHooks();
+		}
+
+		function Load($where=null,$bindarr=false){
+			return BaseService::getInstance()->getCalculationHook($bindarr[0]);
+		}
+    }
+}
+
+if (!class_exists('CustomFieldValue')) {
+	class CustomFieldValue extends ICEHRM_Record {
+		var $_table = 'CustomFieldValues';
+
+		public function getAdminAccess(){
+			return array("get","element","save","delete");
+		}
+
+		public function getUserAccess(){
+			return array("get","element","save","delete");
+		}
+
+		public function getAnonymousAccess(){
+			return array();
+		}
+	}
 }
 
 
