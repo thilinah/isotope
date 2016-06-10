@@ -143,7 +143,7 @@ $logoFileUrl = UIManager::getInstance()->getCompanyLogoUrl();
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', '<?=BaseService::getInstance()->getGAKey()?>', 'your-company-domain.com');
+  ga('create', '<?=BaseService::getInstance()->getGAKey()?>', 'gamonoid.com');
   ga('send', 'pageview');
 
   </script>

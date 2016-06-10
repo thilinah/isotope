@@ -17,7 +17,7 @@ along with Ice Framework. If not, see <http://www.gnu.org/licenses/>.
 
 ------------------------------------------------------------------
 
-Original work Copyright (c) 2012 
+Original work Copyright (c) 2012 [Gamonoid Media Pvt. Ltd]
 Developer: Thilina Hasantha (thilina.hasantha[at]gmail.com / facebook.com/thilinah)
  */
 
@@ -99,6 +99,7 @@ include('configureUIManager.php');
 
 
     <script type="text/javascript" src="<?=BASE_URL?>js/jquery2.0.2.min.js"></script>
+    <script type="text/javascript" src="<?=BASE_URL?>js/jquery-ui.js"></script>
 
     <script src="<?=BASE_URL?>themejs/bootstrap.js"></script>
     <script src="<?=BASE_URL?>js/jquery.placeholder.js"></script>

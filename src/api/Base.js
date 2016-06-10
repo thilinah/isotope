@@ -16,7 +16,7 @@ along with Ice Framework. If not, see <http://www.gnu.org/licenses/>.
 
 ------------------------------------------------------------------
 
-Original work Copyright (c) 2012   
+Original work Copyright (c) 2012 [Gamonoid Media Pvt. Ltd]  
 Developer: Thilina Hasantha (thilina.hasantha[at]gmail.com / facebook.com/thilinah)
  */
 
@@ -51,6 +51,7 @@ this.fieldMasterDataKeys = null;
 this.fieldMasterDataCallback = null;
 this.sourceMapping = null;
 this.currentId = null;
+this.currentElement = null;
 this.user = null;
 this.currentProfile = null;
 this.permissions = {};
@@ -1346,7 +1347,7 @@ IceHRMBase.method('dataGroupToHtml', function(val, field) {
 	}
 	
 	
-	html = $("<div><div>");
+	html = $('<div id="'+field[0]+"_div_inner"+'"></div>');
 	
 	
 	
@@ -1380,8 +1381,8 @@ IceHRMBase.method('dataGroupToHtml', function(val, field) {
 	}
 
 
-	
-	return html.wrap('<div>').parent().html();
+
+	return html;
 });
 
 /**
@@ -1512,21 +1513,80 @@ IceHRMBase.method('addDataGroup', function() {
 		
 		params['id'] = field[0]+"_"+this.dataGroupGetNextAutoIncrementId(data);
 		data.push(params);
+
 		
 		if(field[1]['sort-function'] != undefined && field[1]['sort-function'] != null){
 			data.sort(field[1]['sort-function']);
 		}
 		
 		val = JSON.stringify(data);
-		$("#"+field[0]).val(val);
-		
+
 		var html = this.dataGroupToHtml(val,field);
 		
-		$("#"+field[0]+"_div").html(html);
-		
+		$("#"+field[0]+"_div").html("");
+		$("#"+field[0]+"_div").append(html);
+
+		this.makeDataGroupSortable(field, $("#"+field[0]+"_div_inner"));
+
+
+		$("#"+field[0]).val(val);
+		this.orderDataGroup(field);
+
 		this.closeDataMessage();
 		
 	}
+});
+
+IceHRMBase.method('makeDataGroupSortable', function(field, obj) {
+	obj.data('field',field);
+	obj.data('firstSort',true);
+	obj.sortable({
+
+		create:function(){
+			$(this).height($(this).height());
+		},
+
+		'ui-floating': true,
+		start: function(e, ui) {
+			if ($(this).data('firstSort')){  // Call a refresh on ui-sortable on drag of first element.
+				$(this).sortable( "refreshPositions");
+				$(this).data('firstSort',false);
+			}
+		},
+		revert: true,
+		stop: function() {
+			modJs.orderDataGroup($(this).data('field'));
+		},
+		axis: "y",
+		scroll: false,
+		placeholder: "sortable-placeholder",
+		cursor: "move"
+	});
+
+
+});
+
+IceHRMBase.method('orderDataGroup', function(field) {
+	var newArr = [], id;
+	var list = $("#"+field[0]+"_div_inner [fieldid='"+field[0]+"_div']");
+	var val = $("#"+field[0]).val();
+	if(val == ""){
+		val = "[]";
+	}
+	var data = JSON.parse(val);
+	list.each(function(){
+		id = $(this).attr('id');
+		for(index in data){
+			if(data[index].id == id){
+				newArr.push(data[index]);
+				break;
+			}
+		}
+	});
+
+	$("#"+field[0]).val(JSON.stringify(newArr));
+
+
 });
 
 
@@ -1545,20 +1605,21 @@ IceHRMBase.method('editDataGroup', function() {
 			var data = JSON.parse(val);
 			
 			var editVal = {};
+			var editValIndex = -1;
 			var newVals = [];
 			for(var i=0;i<data.length;i++){
 				item = data[i];
 				if(item.id == id){
 					editVal = item;
-				}else{
-					newVals.push(item);
+					editValIndex = i;
 				}
+				newVals.push(item);
 			}
 			
 			
 			
 			params['id'] = editVal.id;
-			newVals.push(params);
+			newVals[editValIndex] = params;
 			
 			if(field[1]['sort-function'] != undefined && field[1]['sort-function'] != null){
 				newVals.sort(field[1]['sort-function']);
@@ -1568,9 +1629,15 @@ IceHRMBase.method('editDataGroup', function() {
 			$("#"+field[0]).val(val);
 			
 			var html = this.dataGroupToHtml(val,field);
-			
-			$("#"+field[0]+"_div").html(html);
-			
+
+			this.orderDataGroup(field);
+
+			$("#"+field[0]+"_div").html("");
+			$("#"+field[0]+"_div").append(html);
+
+			this.makeDataGroupSortable(field, $("#"+field[0]+"_div_inner"));
+
+
 			this.closeDataMessage();
 		}
 		
@@ -1742,7 +1809,12 @@ IceHRMBase.method('fillForm', function(object, formId, fields) {
 			try{
 				var html = this.dataGroupToHtml(object[fields[i][0]],fields[i]);
 				$(formId + ' #'+fields[i][0]).val(object[fields[i][0]]);
-				$(formId + ' #'+fields[i][0]+"_div").html(html);
+				$(formId + ' #'+fields[i][0]+"_div").html("");
+				$(formId + ' #'+fields[i][0]+"_div").append(html);
+
+				this.makeDataGroupSortable(fields[i], $(formId + ' #'+fields[i][0]+"_div_inner"));
+
+
 			}catch(e){}
 
 		}else if(fields[i][1].type == 'signature'){

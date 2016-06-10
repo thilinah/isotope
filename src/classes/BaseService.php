@@ -18,7 +18,7 @@ along with Ice Framework. If not, see <http://www.gnu.org/licenses/>.
 
 ------------------------------------------------------------------
 
-Original work Copyright (c) 2012   
+Original work Copyright (c) 2012 [Gamonoid Media Pvt. Ltd]  
 Developer: Thilina Hasantha (thilina.hasantha[at]gmail.com / facebook.com/thilinah)
  */
 
@@ -47,6 +47,7 @@ class BaseService{
     var $user = null;
     var $historyManagers = array();
     var $calculationHooks = array();
+	var $customFieldManager = null;
 
 	private static $me = null;
 	
@@ -494,6 +495,14 @@ class BaseService{
 					}	
 				}
 			}
+
+			//Add custom fields
+			$customFields = $this->customFieldManager->getCustomFields($table,$obj->id);
+			foreach ($customFields as $cf){
+				$obj->{$cf->name} = $cf->value;
+			}
+
+
 			$obj = $obj->postProcessGetElement($obj);
 			return 	$this->cleanUpAdoDB($obj->postProcessGetData($obj));
 		}
@@ -509,8 +518,11 @@ class BaseService{
 	 */
 	
 	public function addElement($table,$obj){
+		$customFields = array();
 		$isAdd = true;
 		$ele = new $table();
+		//LogManager::getInstance()->error("Obj:".json_encode($obj));
+
 		if(class_exists("ProVersion")){
 			$pro = new ProVersion();
 			$subscriptionTables = $pro->getSubscriptionTables();
@@ -526,6 +538,8 @@ class BaseService{
 			$isAdd = false;
 			$ele->Load('id = ?',array($obj['id']));	
 		}
+
+		$objectKeys = $ele->getObjectKeys();
 		
 		foreach($obj as $k=>$v){
 			if($k == 'id' || $k == 't' || $k == 'a'){
@@ -534,7 +548,10 @@ class BaseService{
 			if($v == "NULL"){
 				$v = null;	
 			}
-			$ele->$k = $v;	
+			if(isset($objectKeys[$k])){
+				$ele->$k = $v;
+			}
+
 		}
 		
 		
@@ -574,6 +591,9 @@ class BaseService{
 		
 		
 		$ok = $ele->Save();
+
+
+
 		if(!$ok){
 			
 			$error = $ele->ErrorMsg();
@@ -587,7 +607,18 @@ class BaseService{
 			}
 			return new IceResponse(IceResponse::ERROR,$this->findError($error));		
 		}
-		
+		LogManager::getInstance()->error("Element:".json_encode($ele));
+		LogManager::getInstance()->error("Obj:".json_encode($obj));
+		LogManager::getInstance()->error("Obj Keys:".json_encode($objectKeys));
+		$customFields = $ele->getCustomFields($obj);
+		LogManager::getInstance()->error("Custom:".json_encode($customFields));
+		foreach($obj as $k=>$v){
+			if(isset($customFields[$k])){
+				$this->customFieldManager->addCustomField($table, $ele->id, $k, $v);
+			}
+		}
+
+
 		if($isAdd){
 			$ele->executePostSaveActions($ele);
 			$this->audit(IceConstants::AUDIT_ADD, "Added an object to ".$table." [id:".$ele->id."]");
@@ -1211,7 +1242,7 @@ class BaseService{
     
     public function getCustomFields($type){
     	$customField = new CustomField();
-    	$data = $customField->Find("type = ?",array($type));
+    	$data = $customField->Find("type = ? and display = ?",array($type,'Form'));
     	return $data;
     }
 
@@ -1321,6 +1352,135 @@ END;
         }
 
     }
+
+	public function setCustomFieldManager($customFieldManager){
+		$this->customFieldManager = $customFieldManager;
+	}
+
+	public function getCustomFieldManager(){
+		return $this->customFieldManager;
+	}
+
+
+}
+
+class CustomFieldManager {
+	public function addCustomField($type, $id, $name, $value){
+		$customFieldValue = new CustomFieldValue();
+		$customFieldValue->Load("type = ? and name = ? and object_id = ?",
+			array($type, $name, $id));
+
+		if($customFieldValue->object_id != $id){
+			$customFieldValue->name = $name;
+			$customFieldValue->object_id = $id;
+			$customFieldValue->type = $type;
+			$customFieldValue->created = date("Y-md-d H:i:s");
+		}
+
+		$customFieldValue->value = $value;
+		$customFieldValue->updated = date("Y-md-d H:i:s");
+		$customFieldValue->Save();
+	}
+
+	public function getCustomFields($type, $id){
+		$customFieldValue = new CustomFieldValue();
+		$list = $customFieldValue->Find("type = ? and object_id = ?",
+			array($type, $id));
+
+		return $list;
+	}
+
+	public function enrichObjectCustomFields($table, $object){
+		$customFieldsList = BaseService::getInstance()->getCustomFields($table);
+		$customFieldsListOrdered = array();
+		$customFields = array();
+		foreach($customFieldsList as $cf){
+			$customFields[$cf->name] = $cf;
+		}
+
+		$customFieldValues = $this->getCustomFields('Employee',$object->id);
+		$object->customFields = array();
+		foreach ($customFieldValues as $cf){
+
+			if(!isset($customFields[$cf->name])){
+				continue;
+			}
+
+			$type = $customFields[$cf->name]->field_type;
+			$label = $customFields[$cf->name]->field_label;
+			$order = $customFields[$cf->name]->display_order;
+
+			$customFieldsListOrdered[] = $order;
+
+			if($type == "text" || $type == "textarea"){
+				$object->customFields[$label] = $cf->value;
+			}else if($type == 'select' || $type == 'select2'){
+				$options = $customFields[$cf->name]->field_options;
+				if(empty($options)){
+					continue;
+				}
+				$jsonOptions = json_decode($options);
+				foreach($jsonOptions as $option){
+					if($option->value == $cf->value){
+						$object->customFields[$label] = $option->label;
+					}
+				}
+			}else if($type == 'select2multi'){
+				$resArr = array();
+				$options = $customFields[$cf->name]->field_options;
+				if(empty($options) || empty($cf->value)){
+					continue;
+				}
+				$jsonOptions = json_decode($options);
+				$jsonOptionsKeys = array();
+				foreach($jsonOptions as $option){
+					$jsonOptionsKeys[$option->value] = $option->label;
+				}
+
+				$valueList = json_decode($cf->value,true);
+				foreach($valueList as $val){
+					if(!isset($jsonOptionsKeys[$val])){
+						$resArr[] = $val;
+					}else{
+						$resArr[] = $jsonOptionsKeys[$val];
+					}
+				}
+
+				$object->customFields[$label]  = implode('<br/>', $resArr);
+
+			}else if($type == "date"){
+				if(!empty($cf->value)){
+					$object->customFields[$label] = $cf->value;
+				}else{
+					$object->customFields[$label] = date("F j, Y",strtotime($cf->value));
+				}
+
+			}else if($type == "datetime"){
+				if(!empty($cf->value)){
+					$object->customFields[$label] = $cf->value;
+				}else{
+					$object->customFields[$label] = date("F j, Y, g:i a",strtotime($cf->value));
+				}
+			}else if($type == "time"){
+				if(!empty($cf->value)){
+					$object->customFields[$label] = $cf->value;
+				}else{
+					$object->customFields[$label] = date("g:i a",strtotime($cf->value));
+				}
+			}
+
+		}
+
+		LogManager::getInstance()->info("ARR 1".print_r($customFieldsListOrdered,true));
+		LogManager::getInstance()->info("ARR 2".print_r($object->customFields,true));
+		array_multisort($customFieldsListOrdered, SORT_DESC, SORT_NUMERIC, $object->customFields);
+		LogManager::getInstance()->info("ARR 3".print_r($customFieldsListOrdered,true));
+		LogManager::getInstance()->info("ARR 4".print_r($object->customFields,true));
+
+		return $object;
+
+	}
+
 }
 
 
@@ -1366,6 +1526,9 @@ class MemcacheService {
     }
 
     public function set($key, $value, $expiry = 3600) {
+		if(!class_exists('Memcached')){
+			return false;
+		}
         $key = $this->compressKey($key);
         $memcache = $this->connect();
 
@@ -1381,6 +1544,9 @@ class MemcacheService {
 
 
     public function get($key) {
+		if(!class_exists('Memcached')){
+			return false;
+		}
         $key = $this->compressKey($key);
         $memcache = $this->connect();
         if(!empty($memcache) && $this->isConnected()) {

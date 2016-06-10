@@ -68,6 +68,7 @@ include (APP_BASE_PATH."model/custom.models.inc.php");
 $baseService = BaseService::getInstance();
 BaseService::getInstance()->setNonDeletables("User", "id", 1);
 BaseService::getInstance()->setCurrentUser($user);
+BaseService::getInstance()->setCustomFieldManager(new CustomFieldManager());
 BaseService::getInstance()->setDB($dbLocal);
 
 $reportHandler = new ReportHandler();
@@ -76,6 +77,7 @@ $notificationManager = new NotificationManager();
 
 BaseService::getInstance()->setNotificationManager($notificationManager);
 BaseService::getInstance()->setSettingsManager($settingsManager);
+BaseService::getInstance()->setCustomFieldManager(new CustomFieldManager());
 
 $notificationManager->setBaseService($baseService);
 

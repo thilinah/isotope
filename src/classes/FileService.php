@@ -17,7 +17,7 @@ along with Ice Framework. If not, see <http://www.gnu.org/licenses/>.
 
 ------------------------------------------------------------------
 
-Original work Copyright (c) 2012 
+Original work Copyright (c) 2012 [Gamonoid Media Pvt. Ltd]
 Developer: Thilina Hasantha (thilina.hasantha[at]gmail.com / facebook.com/thilinah)
  */
 
@@ -64,6 +64,9 @@ class FileService{
     }
 
     public function saveInCache($key, $data, $expire){
+        if(!class_exists('Memcached')){
+            return;
+        }
         try{
             if(empty($this->memcache)){
                 $this->memcache = new Memcached();

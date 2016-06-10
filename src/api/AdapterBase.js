@@ -16,7 +16,7 @@ along with Ice Framework. If not, see <http://www.gnu.org/licenses/>.
 
 ------------------------------------------------------------------
 
-Original work Copyright (c) 2012   
+Original work Copyright (c) 2012 [Gamonoid Media Pvt. Ltd]  
 Developer: Thilina Hasantha (thilina.hasantha[at]gmail.com / facebook.com/thilinah)
  */
 
@@ -283,6 +283,7 @@ AdapterBase.method('getElement', function(id,callBackData,clone) {
 			if(clone){
 				delete data.object.id;
 			}
+			this.currentElement = data.object;
 			that.getElementSuccessCallBack.apply(that,[callBackData,data.object]);
 		}else{
 			that.getElementFailCallBack.apply(that,[callBackData,data.object]);
