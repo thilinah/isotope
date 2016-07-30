@@ -7,11 +7,11 @@
  <property name="testdir" value="${basedir}/build/test"/>
  <property name="origin" value="${basedir}/src"/>
  <property environment="env"/>
- <property name="env.appname" value="icecamp"/>
+ <property name="env.appname" value="isotope"/>
  <property name="env.Version" value="dev"/>
- <property name="deploydir" value="/var/www/icecamp.app/icecampcore/${env.Version}/"/>
- <property name="installpath" value="/var/www/apps.gamonoid.com/icecamp-core"/>
- <property name="installLocalpath" value="/Applications/XAMPP/xamppfiles/htdocs/icecamp-core"/>
+ <property name="deploydir" value="/var/www/isotope.app/isotopecore/${env.Version}/"/>
+ <property name="installpath" value="/var/www/apps.gamonoid.com/isotope-core"/>
+ <property name="installLocalpath" value="/Applications/XAMPP/xamppfiles/htdocs/isotope-core"/>
 
 	
  <target name="build"
