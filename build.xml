@@ -11,11 +11,11 @@
     <property name="installLocalpath" value="/Applications/XAMPP/xamppfiles/htdocs/isotope-core"/>
 
 
-    <target name="build.jenkins"
+    <target name="build"
             depends="prepare,lint,copyapp,release,install"
             description=""/>
 
-    <target name="build"
+    <target name="buildlocal"
             depends="prepare,copyapp,installLocal"
             description=""/>
 

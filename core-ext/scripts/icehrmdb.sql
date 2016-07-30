@@ -1,3 +1,17 @@
+create table `CompanyStructures` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `title` tinytext not null,
+  `description` text not null,
+  `address` text default NULL,
+  `type` enum('Company','Head Office','Regional Office','Department','Unit','Sub Unit','Other') default NULL,
+  `country` varchar(2) not null default '0',
+  `parent` bigint(20) NULL,
+  `timezone` varchar(100) not null default 'Europe/London',
+  `heads` varchar(255) NULL default NULL,
+  CONSTRAINT `Fk_CompanyStructures_Own` FOREIGN KEY (`parent`) REFERENCES `CompanyStructures` (`id`),
+  primary key  (`id`)
+) engine=innodb default charset=utf8;
+
 create table `Country` (
 	`id` bigint(20) NOT NULL AUTO_INCREMENT,
 	`code` char(2) not null default '',
@@ -75,7 +89,9 @@ create table `Users` (
 	`email` varchar(100) default null,
 	`password` varchar(100) default null,
 	`profile` bigint(20) null,
-	`user_level` enum('Admin','Profile','Manager') default NULL,
+	`default_module` bigint(20) null,
+	`user_level` enum('Admin','Profile','Manager','Other') default NULL,
+	`user_roles` text null,
 	`last_login` DATETIME default '0000-00-00 00:00:00',
 	`last_update` DATETIME default '0000-00-00 00:00:00',
 	`created` DATETIME default '0000-00-00 00:00:00',
@@ -85,6 +101,13 @@ create table `Users` (
 	unique key `username` (`username`)
 ) engine=innodb default charset=utf8;
 
+
+create table `UserRoles` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) default null,
+  primary key  (`id`),
+  unique key `name` (`name`)
+) engine=innodb default charset=utf8;
 
 create table `RestAccessTokens` (
 	`id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -171,6 +194,7 @@ create table `Modules` (
 	`id` bigint(20) NOT NULL AUTO_INCREMENT,
 	`menu` varchar(30) NOT NULL,
 	`name` varchar(100) NOT NULL,
+	`label` varchar(100) NOT NULL,
 	`icon` VARCHAR( 50 ) NULL,
 	`mod_group` varchar(30) NOT NULL,
 	`mod_order` INT(11) NULL,
@@ -178,6 +202,7 @@ create table `Modules` (
 	`version` varchar(10) default '',
 	`update_path` varchar(500) default '',
 	`user_levels` varchar(500) NOT NULL,
+  `user_roles` text null,
 	primary key  (`id`),
 	UNIQUE KEY `Modules_name_modgroup` (`name`,`mod_group`)
 ) engine=innodb default charset=utf8;
@@ -234,4 +259,11 @@ create table `Emails` (
   primary key  (`id`),
   key `KEY_Emails_status` (`status`),
   key `KEY_Emails_created` (`created`)
+) engine=innodb default charset=utf8;
+
+create table `Timezones` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) not null default '',
+  `details` varchar(255) not null default '',
+  primary key  (`id`)
 ) engine=innodb default charset=utf8;
