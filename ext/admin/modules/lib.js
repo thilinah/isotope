@@ -46,7 +46,7 @@ ModuleAdapter.method('getFormFields', function() {
 	        [ "id", {"label":"ID","type":"hidden"}],
 	        [ "label", {"label":"Label","type":"text","validation":""}],
 	        [ "status", {"label":"Status","type":"select","source":[["Enabled","Enabled"],["Disabled","Disabled"]]}],
-            [ "user_levels", {"label":"User Levels","type":"select2multi","source":[["Admin","Admin"],["Manager","Manager"],["Profile","Profile"],["Other","Other"]]}],
+            [ "user_levels", {"label":"User Levels","type":"select2multi","source":[["Admin","Admin"],["Manager","Manager"],["Employee","Employee"],["Other","Other"]]}],
             [ "user_roles", {"label":"User Roles","type":"select2multi","remote-source":["UserRole","id","name"]}]
 	];
 });
@@ -56,12 +56,21 @@ ModuleAdapter.method('getActionButtonsHtml', function(id,data) {
 	
 	
 	var nonEditableFields = {};
-	nonEditableFields["admin_Profiles"] = 1;
+	nonEditableFields["admin_Company Structure"] = 1;
+	nonEditableFields["admin_Employees"] = 1;
+	nonEditableFields["admin_Job Details Setup"] = 1;
+	nonEditableFields["admin_Leaves"] = 1;
 	nonEditableFields["admin_Manage Modules"] = 1;
+	nonEditableFields["admin_Projects"] = 1;
+	nonEditableFields["admin_Qualifications"] = 1;
 	nonEditableFields["admin_Settings"] = 1;
 	nonEditableFields["admin_Users"] = 1;
+	nonEditableFields["admin_Upgrade"] = 1;
+	nonEditableFields["admin_Dashboard"] = 1;
 
-	
+	nonEditableFields["user_Basic Information"] = 1;
+	nonEditableFields["user_Dashboard"] = 1;
+
 	if(nonEditableFields[data[3]+"_"+data[1]] == 1){
 		return "";
 	}

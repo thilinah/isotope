@@ -16,7 +16,7 @@ along with iCE Hrm. If not, see <http://www.gnu.org/licenses/>.
 
 ------------------------------------------------------------------
 
-Original work Copyright (c) 2012   
+Original work Copyright (c) 2012 [Gamonoid Media Pvt. Ltd]  
 Developer: Thilina Hasantha (thilina.hasantha[at]gmail.com / facebook.com/thilinah)
  */
 
@@ -61,9 +61,17 @@ DashboardAdapter.method('getInitData', function() {
 
 DashboardAdapter.method('getInitDataSuccessCallBack', function(data) {
 
-	$("#numberOfProfiles").html(data['numberOfProfiles']+" Profiles");
+	$("#numberOfEmployees").html(data['numberOfEmployees']+" Employees");
+	$("#numberOfCompanyStuctures").html(data['numberOfCompanyStuctures']+" Departments");
 	$("#numberOfUsers").html(data['numberOfUsers']+" Users");
-	
+	$("#numberOfProjects").html(data['numberOfProjects']+" Active Projects");
+	$("#numberOfAttendanceLastWeek").html(data['numberOfAttendanceLastWeek']+" Entries Last Week");
+	$("#numberOfLeaves").html(data['numberOfLeaves']+" Upcoming");
+	$("#numberOfTimeEntries").html(data['numberOfTimeEntries']);
+    $("#numberOfCandidates").html(data['numberOfCandidates']+" Candidates");
+    $("#numberOfJobs").html(data['numberOfJobs']+" Active");
+    $("#numberOfCourses").html(data['numberOfCourses']+" Courses");
+
 });
 
 DashboardAdapter.method('getInitDataFailCallBack', function(callBackData) {

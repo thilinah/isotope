@@ -117,6 +117,10 @@ IceHRMBase.method('setGoogleAnalytics' , function(ga) {
 	this.ga = ga;
 });
 
+IceHRMBase.method('scrollToTop' , function() {
+	$("html, body").animate({ scrollTop: 0 }, "fast");
+});
+
 /**
  * If this method returned false the action buttons in data table for modules will not be displayed.
  * Override this method in module lib.js to hide action buttons
@@ -1273,6 +1277,8 @@ IceHRMBase.method('renderForm', function(object) {
 		if(object != undefined && object != null){
 			this.fillForm(object);
 		}
+
+		this.scrollToTop();
 		
 	}else{
 		
@@ -1296,6 +1302,7 @@ IceHRMBase.method('renderForm', function(object) {
 		if(object != undefined && object != null){
 			this.fillForm(object,"#"+randomFormId);
 		}
+
 	}
 	
 	this.postRenderForm(object,$tempDomObj);
@@ -1337,8 +1344,8 @@ IceHRMBase.method('dataGroupToHtml', function(val, field) {
 	var data = JSON.parse(val),
 		deleteButton, t, sortFunction, item,key = null, i, html, template, itemHtml, itemVal;
 	
-	deleteButton = '<button id="#_id_#_delete" onclick="modJs.deleteDataGroupItem(\'#_id_#\');return false;" type="button" style="float:right;margin-right:-8px;" tooltip="Delete"><li class="fa fa-times"></li></button>';
-	editButton = '<button id="#_id_#_edit" onclick="modJs.editDataGroupItem(\'#_id_#\');return false;" type="button" style="float:right;margin-right:4px;" tooltip="Edit"><li class="fa fa-edit"></li></button>';
+	deleteButton = '<a id="#_id_#_delete" onclick="modJs.deleteDataGroupItem(\'#_id_#\');return false;" type="button" style="float:right;margin-right:3px;" tooltip="Delete"><li class="fa fa-times"></li></a>';
+	editButton = '<a id="#_id_#_edit" onclick="modJs.editDataGroupItem(\'#_id_#\');return false;" type="button" style="float:right;margin-right:5px;" tooltip="Edit"><li class="fa fa-edit"></li></a>';
 	
 	template = field[1]['html'];
 	
@@ -1533,7 +1540,10 @@ IceHRMBase.method('addDataGroup', function() {
 		this.orderDataGroup(field);
 
 		this.closeDataMessage();
-		
+
+		this.showMessage("Item Added","This change will be effective only when you save the form");
+
+
 	}
 });
 
@@ -1546,12 +1556,18 @@ IceHRMBase.method('makeDataGroupSortable', function(field, obj) {
 			$(this).height($(this).height());
 		},
 
-		'ui-floating': true,
+		'ui-floating': false,
 		start: function(e, ui) {
-			if ($(this).data('firstSort')){  // Call a refresh on ui-sortable on drag of first element.
-				$(this).sortable( "refreshPositions");
-				$(this).data('firstSort',false);
-			}
+			$('#sortable-ul-selector-id').sortable({
+				sort: function(event, ui) {
+					var $target = $(event.target);
+					if (!/html|body/i.test($target.offsetParent()[0].tagName)) {
+						var top = event.pageY - $target.offsetParent().offset().top - (ui.helper.outerHeight(true) / 2);
+						ui.helper.css({'top' : top + 'px'});
+					}
+				}
+			});
+
 		},
 		revert: true,
 		stop: function() {
@@ -1639,6 +1655,9 @@ IceHRMBase.method('editDataGroup', function() {
 
 
 			this.closeDataMessage();
+
+			this.showMessage("Item Edited","This change will be effective only when you save the form");
+
 		}
 		
 	}
@@ -1681,25 +1700,28 @@ IceHRMBase.method('dataGroupGetNextAutoIncrementId', function(data) {
 	
 });
 
+
 IceHRMBase.method('deleteDataGroupItem', function(id) {
 	var fieldId = id.substring(0,id.lastIndexOf("_"));
-	
+
 	var val = $("#"+fieldId).val();
 	var data = JSON.parse(val);
-	
+
 	var newVal = [];
-	
+
 	for(var i=0;i<data.length;i++){
 		item = data[i];
 		if(item.id != id){
 			newVal.push(item);
 		}
 	}
-	
+
 	$("#"+fieldId).val(JSON.stringify(newVal));
-	
+
 	$("#"+id).remove();
-	
+
+	this.showMessage("Item Removed","Item removed. This change will be effective only when you save the form");
+
 });
 
 

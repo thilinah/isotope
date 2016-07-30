@@ -17,7 +17,7 @@ along with iCE Hrm. If not, see <http://www.gnu.org/licenses/>.
 
 ------------------------------------------------------------------
 
-Original work Copyright (c) 2012   
+Original work Copyright (c) 2012 [Gamonoid Media Pvt. Ltd]  
 Developer: Thilina Hasantha (thilina.hasantha[at]gmail.com / facebook.com/thilinah)
  */
 
@@ -25,41 +25,41 @@ $moduleName = 'dashboard';
 define('MODULE_PATH',dirname(__FILE__));
 include APP_BASE_PATH.'header.php';
 include APP_BASE_PATH.'modulejslibs.inc.php';
+
+
 ?><div class="span9">
-			  
-	<div class="row">
-        <?php
-        $moduleManagers = BaseService::getInstance()->getModuleManagers();
-        $dashBoardList = array();
-        foreach($moduleManagers as $moduleManagerObj){
+<div class="row">
 
-            //Check if this is not an admin module
-            if($moduleManagerObj->getModuleType() != 'admin'){
-                continue;
-            }
+    <?php
+    $moduleManagers = BaseService::getInstance()->getModuleManagers();
+    $dashBoardList = array();
+    foreach($moduleManagers as $moduleManagerObj){
 
-            $allowed = BaseService::getInstance()->isModuleAllowedForUser($moduleManagerObj);
-
-            if(!$allowed){
-                continue;
-            }
-
-            $item = $moduleManagerObj->getDashboardItem();
-            if(!empty($item)) {
-                $index = $moduleManagerObj->getDashboardItemIndex();
-                $dashBoardList[$index] = $item;
-            }
+        //Check if this is not an admin module
+        if($moduleManagerObj->getModuleType() != 'admin'){
+            continue;
         }
 
-        ksort($dashBoardList);
+        $allowed = BaseService::getInstance()->isModuleAllowedForUser($moduleManagerObj);
 
-        foreach($dashBoardList as $k=>$v){
-            echo $v;
+        if(!$allowed){
+            continue;
         }
-        ?>
-		                
-	</div>
-	
+
+        $item = $moduleManagerObj->getDashboardItem();
+        if(!empty($item)) {
+            $index = $moduleManagerObj->getDashboardItemIndex();
+            $dashBoardList[$index] = $item;
+        }
+    }
+
+    ksort($dashBoardList);
+
+    foreach($dashBoardList as $k=>$v){
+        echo $v;
+    }
+    ?>
+</div>
 	
 
 </div>

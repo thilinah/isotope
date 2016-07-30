@@ -1,0 +1,11 @@
+{
+  "label":"Report Files",
+  "menu":"User Reports",
+  "order":"2",
+  "icon":"fa-files-o",
+  "user_levels":["Admin","Manager","Employee"],
+  "dashboardPosition":7,
+  "permissions":
+      {
+      }
+}

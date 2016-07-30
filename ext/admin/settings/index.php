@@ -17,7 +17,7 @@ along with iCE Hrm. If not, see <http://www.gnu.org/licenses/>.
 
 ------------------------------------------------------------------
 
-Original work Copyright (c) 2012   
+Original work Copyright (c) 2012 [Gamonoid Media Pvt. Ltd]  
 Developer: Thilina Hasantha (thilina.hasantha[at]gmail.com / facebook.com/thilinah)
  */
 
@@ -25,40 +25,27 @@ $moduleName = 'settings';
 define('MODULE_PATH',dirname(__FILE__));
 include APP_BASE_PATH.'header.php';
 include APP_BASE_PATH.'modulejslibs.inc.php';
-?><div class="span9">
-			  
-	<ul class="nav nav-tabs" id="modTab" style="margin-bottom:0px;margin-left:5px;border-bottom: none;">
-		<li class="active"><a id="tabSetting" href="#tabPageSetting">Settings</a></li>
-		<li class=""><a id="tabLog" href="#tabPageLog">Logs</a></li>
-	</ul>
-	 
-	<div class="tab-content">
-		<div class="tab-pane active" id="tabPageSetting">
-			<div id="Setting" class="reviewBlock" data-content="List" style="padding-left:5px;">
-		
-			</div>
-			<div id="SettingForm" class="reviewBlock" data-content="Form" style="padding-left:5px;display:none;">
-		
-			</div>
-		</div>
-        <div class="tab-pane active" id="tabPageLog">
-            <div id="Log" class="reviewBlock" data-content="List" style="padding-left:5px;font-size: 13px;">
 
-            </div>
+$moduleBuilder = new ModuleBuilder();
 
-        </div>
-	</div>
+$options1 = array();
+$options1['setShowAddNew'] = 'false';
 
+$moduleBuilder->addModuleOrGroup(new ModuleTab('CompanySetting','Setting','Company','SettingAdapter','{"name":["Company:"]}','name',true,$options1));
+$moduleBuilder->addModuleOrGroup(new ModuleTab('SystemSetting','Setting','System','SettingAdapter','{"name":["System:"]}','name',false,$options1));
+$moduleBuilder->addModuleOrGroup(new ModuleTab('EmailSetting','Setting','Email','SettingAdapter','{"name":["Email:"]}','name',false,$options1));
+$moduleBuilder->addModuleOrGroup(new ModuleTab('LeaveSetting','Setting','Leave / PTO','SettingAdapter','{"name":["Leave:"]}','name',false,$options1));
+//$moduleBuilder->addModuleOrGroup(new ModuleTab('LDAPSetting','Setting','LDAP','SettingAdapter','{"name":["LDAP:"]}','name',false,$options1));
+$moduleBuilder->addModuleOrGroup(new ModuleTab('AttendanceSetting','Setting','Attendance','SettingAdapter','{"name":["Attendance:"]}','name',false,$options1));
+$moduleBuilder->addModuleOrGroup(new ModuleTab('OtherSetting','Setting','Other','SettingAdapter','{"name":["Projects:","Recruitment:","Notifications:","Expense:","Travel:","Api:","Overtime:"]}','name',false,$options1));
+echo UIManager::getInstance()->renderModule($moduleBuilder);
+?>
 </div>
 <script>
-var modJsList = new Array();
 
-modJsList['tabSetting'] = new SettingAdapter('Setting','Setting','','name');
-modJsList['tabSetting'].setShowAddNew(false);
-modJsList['tabLog'] = new LogAdapter('Log','Log','','');
-modJsList['tabLog'].setShowAddNew(false);
-
-var modJs = modJsList['tabSetting'];
+$(window).load(function() {
+    modJs.loadRemoteDataForSettings();
+});
 
 </script>
 <?php include APP_BASE_PATH.'footer.php';?>      

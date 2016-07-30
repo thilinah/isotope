@@ -1,5 +1,7 @@
 {
-	"Admin":"fa-cubes",
-	"System":"fa-cogs"
+"Admin":"fa-cubes",
+"Employees":"fa-users",
+"Admin Reports":"fa-file-text",
+"System":"fa-cogs",
+"Payroll":"fa-money"
 }
-

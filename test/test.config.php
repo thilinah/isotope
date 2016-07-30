@@ -1,34 +1,36 @@
 <?php
-ini_set('error_log', '/tmp/iceframework_test.log');
+ini_set('error_log', '/tmp/icehrm.test.log');
 
 define('TEST_BASE_PATH', dirname(__FILE__).'/');
 
-define('APP_NAME', 'Isotope Framework');
-define('FB_URL', 'Isotope Framework');
-define('TWITTER_URL', 'Isotope Framework');
+define('APP_NAME', 'IceHrm');
+define('FB_URL', 'IceHrm');
+define('TWITTER_URL', 'IceHrm');
+
+define('SIGN_IN_ELEMENT_MAPPING_FIELD_NAME','employee');
 
 define('CLIENT_NAME', 'app');
-define('APP_BASE_PATH', dirname(__FILE__).'/../src/');
+define('APP_BASE_PATH', realpath(dirname(__FILE__).'/../app')."/");
+echo 'APP_BASE_PATH :'.APP_BASE_PATH."\r\n";
 define('CLIENT_BASE_PATH', APP_BASE_PATH.'app/');
-define('BASE_URL','http://apps.your-company-domain.com/ice-framework/');
-define('CLIENT_BASE_URL','http://apps.your-company-domain.com/ice-framework/app/');
+define('BASE_URL','http://apps.gamonoid.com/icehrmcore/');
+define('CLIENT_BASE_URL','http://apps.gamonoid.com/icehrm/');
 
-define('APP_DB', 'icef_sample_db_test');
-define('APP_USERNAME', MYSQL_ROT_USER);
-define('APP_PASSWORD', MYSQL_ROT_PASS);
+
+
+define('APP_DB', 'icehrmht');
+if(!defined('MYSQL_ROOT_USER')){
+    define('APP_USERNAME', 'root');
+    define('APP_PASSWORD', '');
+}else{
+    define('APP_USERNAME', MYSQL_ROOT_USER);
+    define('APP_PASSWORD', MYSQL_ROOT_PASS);
+}
+
 define('APP_HOST', 'localhost');
-define('APP_CON_STR', 'mysql://'.APP_USERNAME.':'.APP_PASSWORD.'@'.APP_HOST.'/'.APP_DB);
+define('APP_CON_STR', 'mysqli://'.APP_USERNAME.':'.APP_PASSWORD.'@'.APP_HOST.'/'.APP_DB);
 
 //file upload
 define('FILE_TYPES', 'jpg,png,jpeg');
 define('MAX_FILE_SIZE_KB', 10 * 1024);
-
-//Home Links
-define('HOME_LINK_ADMIN', CLIENT_BASE_URL."?g=admin&n=dashboard&m=admin_Admin");
-define('HOME_LINK_OTHERS', CLIENT_BASE_URL."?g=modules&n=dashboard&m=module_My_Account");
-
-//Version
-define('VERSION', '2.0');
-define('VERSION_DATE', '12/03/2015');
-
-if(!defined('SIGN_IN_ELEMENT_MAPPING_FIELD_NAME')){define('SIGN_IN_ELEMENT_MAPPING_FIELD_NAME','profile');}
+define('CLIENT_PATH',APP_BASE_PATH);

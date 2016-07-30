@@ -52,6 +52,8 @@ include APP_BASE_PATH.'admin/modules/api/ModulesAdminManager.php';
 include APP_BASE_PATH.'admin/permissions/api/PermissionsAdminManager.php';
 
 include (APP_BASE_PATH."classes/ApproveActionManager.php");
+include (APP_BASE_PATH."classes/ApprovalStatus.php");
+include (APP_BASE_PATH."classes/StatusChangeLogManager.php");
 
 $dbLocal = NewADOConnection(APP_CON_STR);
 

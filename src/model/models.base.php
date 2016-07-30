@@ -18,19 +18,19 @@ class ICEHRM_Record extends ADOdb_Active_Record{
 		return array("get","element","save","delete");
 	}
 
+	public function getOtherAccess(){
+		return array("get","element","save","delete");
+	}
+
 	public function getManagerAccess(){
 		return array("get","element");
 	}
 
-    public function getOtherAccess(){
-        return array("get","element","save","delete");
-    }
-
 	public function getUserAccess(){
 		return array("get","element");
 	}
-	
-	public function getProfileAccess(){
+
+	public function getEmployeeAccess(){
 		return $this->getUserAccess();
 	}
 
@@ -43,11 +43,11 @@ class ICEHRM_Record extends ADOdb_Active_Record{
 	}
 
 	public function getUserOnlyMeAccessField(){
-		return "profile";
+		return "employee";
 	}
 
 	public function getUserOnlyMeAccessRequestField(){
-		return "profile";
+		return "employee";
 	}
 
 	public function validateSave($obj){
@@ -70,26 +70,30 @@ class ICEHRM_Record extends ADOdb_Active_Record{
 
 	}
 
-    public function postProcessGetData($obj){
-        return $obj;
-    }
+	public function postProcessGetData($obj){
+		return $obj;
+	}
 
 	public function postProcessGetElement($obj){
 		return $obj;
 	}
 
-    public function getDefaultAccessLevel(){
-        return array("get","element","save","delete");
-    }
+	public function getDefaultAccessLevel(){
+		return array("get","element","save","delete");
+	}
 
-    public function getVirtualFields(){
-        return array(
-        );
-    }
+	public function getVirtualFields(){
+		return array(
+		);
+	}
 
-    public function allowIndirectMapping(){
-        return false;
-    }
+	public function allowIndirectMapping(){
+		return false;
+	}
+
+	public function getDisplayName() {
+		return get_called_class();
+	}
 
 	public function getObjectKeys(){
 		$keys = array();

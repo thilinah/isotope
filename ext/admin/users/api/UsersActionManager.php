@@ -17,14 +17,22 @@ along with iCE Hrm. If not, see <http://www.gnu.org/licenses/>.
 
 ------------------------------------------------------------------
 
-Original work Copyright (c) 2012   
+Original work Copyright (c) 2012 [Gamonoid Media Pvt. Ltd]  
 Developer: Thilina Hasantha (thilina.hasantha[at]gmail.com / facebook.com/thilinah)
  */
 
 class UsersActionManager extends SubActionManager{
 	public function changePassword($req){
-		if($this->user->user_level == 'Admin' || $this->user->id == $req->id){
-			$user = $this->baseService->getElement('User',$req->id);
+        if(defined('DEMO_MODE')){
+            return new IceResponse(IceResponse::ERROR,"You are not allowed to change the password in demo mode");
+        }
+
+        $user = new User();
+        $user->Load("id = ?",array($req->id));
+        LogManager::getInstance()->debug("Current User:".print_r($this->user,true));
+        LogManager::getInstance()->debug("Edit User:".print_r($user,true));
+		if($this->user->user_level == 'Admin' || $this->user->id == $user->id){
+
 			if(empty($user->id)){
 				return new IceResponse(IceResponse::ERROR,"Please save the user first");
 			}	
@@ -59,15 +67,15 @@ class UsersActionManager extends SubActionManager{
 			$user->username = $req->username;
 			$password = $this->generateRandomString(6);
 			$user->password = md5($password);
-			$user->profile = (empty($req->profile) || $req->profile == "NULL" )?NULL:$req->profile;
+			$user->employee = (empty($req->employee) || $req->employee == "NULL" )?NULL:$req->employee;
 			$user->user_level = $req->user_level;
 			$user->last_login = date("Y-m-d H:i:s");
 			$user->last_update = date("Y-m-d H:i:s");
 			$user->created = date("Y-m-d H:i:s");
 			
-			$profile = null;
-			if(!empty($user->profile)){
-				$profile = $this->baseService->getElement('profile',$user->profile,null,true);
+			$employee = null;
+			if(!empty($user->employee)){
+				$employee = $this->baseService->getElement('Employee',$user->employee,null,true);
 			}
 			
 			$ok = $user->Save();
@@ -80,7 +88,7 @@ class UsersActionManager extends SubActionManager{
 			
 			if(!empty($this->emailSender)){
 				$usersEmailSender = new UsersEmailSender($this->emailSender, $this);
-				$usersEmailSender->sendWelcomeUserEmail($user, $password, $profile);
+				$usersEmailSender->sendWelcomeUserEmail($user, $password, $employee);
 			}
 			return new IceResponse(IceResponse::SUCCESS,$user);
 		}

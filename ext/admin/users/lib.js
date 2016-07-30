@@ -14,7 +14,7 @@ UserAdapter.method('getDataMapping', function() {
 	        "id",
 	        "username",
 	        "email",
-	        "profile",
+	        "employee",
 	        "user_level"
 	];
 });
@@ -24,7 +24,7 @@ UserAdapter.method('getHeaders', function() {
 			{ "sTitle": "ID" },
 			{ "sTitle": "User Name" },
 			{ "sTitle": "Authentication Email" },
-			{ "sTitle": "Profile"},
+			{ "sTitle": "Employee"},
 			{ "sTitle": "User Level"}
 	];
 });
@@ -34,8 +34,8 @@ UserAdapter.method('getFormFields', function() {
 	        [ "id", {"label":"ID","type":"hidden","validation":""}],
 	        [ "username", {"label":"User Name","type":"text","validation":"username"}],
 	        [ "email", {"label":"Email","type":"text","validation":"email"}],
-	        [ "profile", {"label":"Profile","type":"select2","allow-null":true,"remote-source":["Profile","id","first_name+last_name"]}],
-	        [ "user_level", {"label":"User Level","type":"select","source":[["Admin","Admin"],["Manager","Manager"],["Profile","Profile"],["Other","Other"]]}],
+	        [ "employee", {"label":"Employee","type":"select2","allow-null":true,"remote-source":["Employee","id","first_name+last_name"]}],
+	        [ "user_level", {"label":"User Level","type":"select","source":[["Admin","Admin"],["Manager","Manager"],["Employee","Employee"],["Other","Other"]]}],
             [ "user_roles", {"label":"User Roles","type":"select2multi","remote-source":["UserRole","id","name"]}],
             [ "default_module", {"label":"Default Module","type":"select2","null-label":"No Default Module","allow-null":true,"remote-source":["Module","id","menu+label"]}]
 	];
@@ -64,9 +64,9 @@ UserAdapter.method('saveUserFailCallBack', function(callBackData,serverData) {
 
 UserAdapter.method('doCustomValidation', function(params) {
 	var msg = null;
-	if((params['user_level'] != "Admin" && params['user_level'] != "Other") && params['profile'] == "NULL"){
-		msg = "For this user type, you have to assign an profile when adding or editing the user.<br/>";
-		msg += " You may create a new profile through 'Admin'->'Profiles' menu";
+	if((params['user_level'] != "Admin" && params['user_level'] != "Other") && params['employee'] == "NULL"){
+		msg = "For this user type, you have to assign an employee when adding or editing the user.<br/>";
+		msg += " You may create a new employee through 'Admin'->'Employees' menu";
 	}
 	return msg;
 });
@@ -186,13 +186,14 @@ UserRoleAdapter.method('getHeaders', function() {
     ];
 });
 
+
+UserRoleAdapter.method('postRenderForm', function(object, $tempDomObj) {
+	$tempDomObj.find("#changePasswordBtn").remove();
+});
+
 UserRoleAdapter.method('getFormFields', function() {
     return [
         [ "id", {"label":"ID","type":"hidden"}],
         [ "name", {"label":"Name","type":"text","validation":""}]
     ];
-});
-
-UserRoleAdapter.method('postRenderForm', function(object, $tempDomObj) {
-    $tempDomObj.find("#changePasswordBtn").remove();
 });

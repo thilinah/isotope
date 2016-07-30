@@ -17,20 +17,23 @@ along with iCE Hrm. If not, see <http://www.gnu.org/licenses/>.
 
 ------------------------------------------------------------------
 
-Original work Copyright (c) 2012   
+Original work Copyright (c) 2012 [Gamonoid Media Pvt. Ltd]  
 Developer: Thilina Hasantha (thilina.hasantha[at]gmail.com / facebook.com/thilinah)
  */
 
 class SettingsInitialize extends AbstractInitialize{
-	
+
 	public function init(){
 		if(SettingsManager::getInstance()->getSetting("Api: REST Api Enabled") == "1"){
 			$user = BaseService::getInstance()->getCurrentUser();
+			if(empty($user)){
+				return;
+			}
 			$dbUser = new User();
 			$dbUser->Load("id = ?",array($user->id));
 			$resp = RestApiManager::getInstance()->getAccessTokenForUser($dbUser);
 			if($resp->getStatus() != IceResponse::SUCCESS){
-				LogManager::getInstance()->error("Error occured while creating REST Api acces token for ".$user->username);
+				LogManager::getInstance()->error("Error occurred while creating REST Api access token for ".$user->username);
 			}
 		}
 		

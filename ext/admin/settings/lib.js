@@ -55,62 +55,56 @@ SettingAdapter.method('getMetaFieldForRendering', function(fieldName) {
 	return "";
 });
 
+SettingAdapter.method('edit', function(id) {
+    this.loadRemoteDataForSettings();
+    this.uber('edit',id);
+});
+
 
 SettingAdapter.method('fillForm', function(object) {
-	this.uber('fillForm',object);
+
+	var metaField = this.getMetaFieldForRendering('value');
+	var metaVal = object[metaField];
+	var formFields = null;
+
+	if(metaVal != "" && metaVal != undefined){
+		var formFields = [
+			[ "id", {"label":"ID","type":"hidden"}],
+			JSON.parse(metaVal)
+		];
+	}
+
+
+	this.uber('fillForm',object, null, formFields);
 	$("#helptext").html(object.description);
 });
 
 
+SettingAdapter.method('loadRemoteDataForSettings', function () {
+	var fields = [];
+	var field = null;
+	fields.push(["country", {"label": "Country", "type": "select2multi", "remote-source": ["Country", "id", "name"]}]);
+	fields.push(["currency", {"label": "Currency", "type": "select2multi", "remote-source": ["CurrencyType","id","code+name"]}]);
+	fields.push(["nationality", {"label": "Nationality", "type": "select2multi", "remote-source": ["Nationality","id","name"]}]);
 
-/**
- * LogAdapter
- */
+	for(index in fields){
+		field = fields[index];
+		if (field[1]['remote-source'] != undefined && field[1]['remote-source'] != null) {
+			var key = field[1]['remote-source'][0] + "_" + field[1]['remote-source'][1] + "_" + field[1]['remote-source'][2];
+			this.fieldMasterDataKeys[key] = false;
+			this.sourceMapping[field[0]] = field[1]['remote-source'];
 
-function LogAdapter(endPoint,tab,filter,orderBy) {
-    this.initAdapter(endPoint,tab,filter,orderBy);
-}
+			var callBackData = {};
+			callBackData['callBack'] = 'initFieldMasterDataResponse';
+			callBackData['callBackData'] = [key];
 
-LogAdapter.inherits(AdapterBase);
-
-
-
-LogAdapter.method('getDataMapping', function() {
-    return [
-
-    ];
-});
-
-LogAdapter.method('getHeaders', function() {
-    return [
-
-    ];
-});
-
-LogAdapter.method('getFormFields', function() {
-    return [
-
-    ];
-});
-
-LogAdapter.method('get', function(id) {
-    var that = this;
-    var object = {};
-    var reqJson = JSON.stringify(object);
-
-    var callBackData = [];
-    callBackData['callBackData'] = [];
-    callBackData['callBackSuccess'] = 'getLogsSuccessCallback';
-    callBackData['callBackFail'] = 'getLogsFailCallback';
-
-    this.customAction('getAppLog','admin=settings',reqJson,callBackData);
+			this.getFieldValues(field[1]['remote-source'], callBackData);
+		}
+	}
 
 });
 
-LogAdapter.method('getLogsSuccessCallback', function(data) {
-    $("#Log").html(data);
-});
 
-LogAdapter.method('getLogsFailCallback', function() {
-    this.showMessage("Error", "Log request failed");
+SettingAdapter.method('getHelpLink', function () {
+	return 'http://blog.icehrm.com/docs/settings/';
 });

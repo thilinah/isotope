@@ -148,7 +148,6 @@ include('configureUIManager.php');
     <script type="text/javascript" src="<?=BASE_URL?>api/TimeUtils.js?v=<?=$jsVersion?>"></script>
     <script type="text/javascript" src="<?=BASE_URL?>api/AesCrypt.js?v=<?=$jsVersion?>"></script>
     <script type="text/javascript" src="<?=BASE_URL?>api/SocialShare.js?v=<?=$jsVersion?>"></script>
-    <?php include 'modulejslibs.inc.php';?>
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -276,6 +275,39 @@ include('configureUIManager.php');
 
                 <?php }?>
 
+                <?php
+                if(file_exists(CLIENT_PATH.'/third_party_meta.json')){
+                    $tpModules = json_decode(file_get_contents(CLIENT_PATH.'/third_party_meta.json'),true);
+                    foreach($tpModules as $menu){?>
+
+                    <?php if(count($menu['menu']) == 0){continue;}?>
+                    <li  class="treeview" ref="<?="module_".str_replace(" ", "_", $menu['name'])?>">
+                        <a href="#">
+                            <i class="fa <?=$menu['icon']?>"></i></i> <span><?=$menu['name']?></span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+
+                        <ul class="treeview-menu" id="<?="module_".str_replace(" ", "_", $menu['name'])?>">
+                            <?php foreach ($menu['menu'] as $item){?>
+                                <li>
+                                    <a href="<?=$item['link']?>" target="_blank">
+                                        <i class="fa <?=!isset($item['icon'])?"fa-angle-double-right":$item['icon']?>"></i> <?=$item['label']?>
+                                    </a>
+                                </li>
+                            <?php }?>
+                        </ul>
+                    </li>
+                <?php }
+                }?>
+                
+
+                <li>
+                    <div class="user-panel">
+                        <div class="info">
+                            <p></p>
+                        </div>
+                    </div>
+                </li>
 
 
             </ul>
