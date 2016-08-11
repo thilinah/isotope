@@ -1,8 +1,8 @@
 {
-  "label":"Users",
-  "menu":"System",
-  "order":"2",
-  "icon":"fa-user",
+  "label":"Logins",
+  "menu":"Admin",
+  "order":"4",
+  "icon":"fa-lock",
   "user_levels":["Admin"],
   "dashboardPosition":3,
 

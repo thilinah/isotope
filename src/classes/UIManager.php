@@ -44,7 +44,7 @@ class UIManager{
             $template = str_replace("#_".$key."_#", $value, $template);
         }
 
-        return $template;
+        return LanguageManager::translateTnrText($template);
     }
 
     public function setCurrentUser($user){
@@ -186,7 +186,8 @@ class UIManager{
     }
 
     public function addQuickAccessMenuItem($name, $icon, $link, $userLevels = array()){
-        $this->quickAccessMenuItems[] = array($name, $icon, $link, $userLevels);
+        $newName = LanguageManager::tran($name);
+        $this->quickAccessMenuItems[] = array($newName, $icon, $link, $userLevels);
     }
 
     public function getQuickAccessMenuItemsHTML(){

@@ -1,7 +1,7 @@
 {
 "label":"Manage Metadata",
-"menu":"System",
-"order":"6",
+"menu":"Admin",
+"order":"8",
 "icon":"fa-sort-alpha-asc",
 "user_levels":["Admin"],
 

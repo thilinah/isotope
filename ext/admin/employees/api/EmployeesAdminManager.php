@@ -43,8 +43,8 @@ if (!class_exists('EmployeesAdminManager')) {
         }
 
         public function initQuickAccessMenu(){
-            UIManager::getInstance()->addQuickAccessMenuItem("View Employees","fa-users",CLIENT_BASE_URL."?g=admin&n=employees&m=admin_Employees",array("Admin","Manager"));
-            UIManager::getInstance()->addQuickAccessMenuItem("Add a New Employee","fa-edit",CLIENT_BASE_URL."?g=admin&n=employees&m=admin_Employees&action=new",array("Admin"));
+            UIManager::getInstance()->addQuickAccessMenuItem("View Users","fa-users",CLIENT_BASE_URL."?g=admin&n=employees&m=admin_Admin",array("Admin","Manager"));
+            UIManager::getInstance()->addQuickAccessMenuItem("Add a New User","fa-edit",CLIENT_BASE_URL."?g=admin&n=employees&m=admin_Admin&action=new",array("Admin"));
 
         }
 

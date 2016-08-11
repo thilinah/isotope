@@ -25,6 +25,7 @@ if(defined("MODULE_PATH")){
 $user = SessionUtils::getSessionObject('user');
 
 include (APP_BASE_PATH."classes/BaseService.php");
+include (APP_BASE_PATH."classes/LanguageManager.php");
 include (APP_BASE_PATH."classes/CronUtils.php");
 include (APP_BASE_PATH."classes/LDAPManager.php");
 include (APP_BASE_PATH."classes/FileService.php");

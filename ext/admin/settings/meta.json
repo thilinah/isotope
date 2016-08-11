@@ -1,7 +1,7 @@
 {
   "label":"Settings",
-  "menu":"System",
-  "order":"1",
+  "menu":"Admin",
+  "order":"5",
   "icon":"fa-cogs",
   "user_levels":["Admin"],
   "dashboardPosition":8,

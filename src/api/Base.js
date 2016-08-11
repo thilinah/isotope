@@ -40,6 +40,7 @@ function IceHRMBase() {
 	this.currentFilterString = "";
     this.sorting = 0;
 	this.settings = {};
+	this.translations = {};
 }
 
 this.fieldTemplates = null;
@@ -119,6 +120,38 @@ IceHRMBase.method('setGoogleAnalytics' , function(ga) {
 
 IceHRMBase.method('scrollToTop' , function() {
 	$("html, body").animate({ scrollTop: 0 }, "fast");
+});
+
+
+IceHRMBase.method('setTranslations' , function(txt) {
+	this.translations = txt['messages'][''];
+});
+
+IceHRMBase.method('gt' , function(key) {
+	if(this.translations[key] == undefined){
+		return key;
+	}
+	return this.translations[key][0];
+});
+
+IceHRMBase.method('addToLangTerms' , function(key) {
+	var termsArr;
+	var terms = localStorage.getItem("terms");
+	if(terms == undefined){
+		termsArr = {};
+	}else{
+		try{
+			termsArr = JSON.parse(terms);
+		}catch(e){
+			termsArr = {};
+		}
+
+	}
+
+	if(this.translations[key] == undefined){
+		termsArr[key] = key;
+		localStorage.setItem("terms", JSON.stringify(termsArr));
+	}
 });
 
 /**
@@ -414,14 +447,14 @@ IceHRMBase.method('callFunction', function (callback, cbParams,thisParam) {
 IceHRMBase.method('getTableTopButtonHtml', function() {
 	var html = "";
 	if(this.getShowAddNew()){
-		html = '<button onclick="modJs.renderForm();return false;" class="btn btn-small btn-primary">'+this.getAddNewLabel()+' <i class="fa fa-plus"></i></button>';
+		html = '<button onclick="modJs.renderForm();return false;" class="btn btn-small btn-primary">'+this.gt(this.getAddNewLabel())+' <i class="fa fa-plus"></i></button>';
 	}
 	
 	if(this.getFilters() != null){
 		if(html != ""){
 			html += "&nbsp;&nbsp;";
 		}
-		html+='<button onclick="modJs.showFilters();return false;" class="btn btn-small btn-primary">Filter <i class="fa fa-filter"></i></button>';
+		html+='<button onclick="modJs.showFilters();return false;" class="btn btn-small btn-primary">'+this.gt('Filter')+' <i class="fa fa-filter"></i></button>';
 		html += "&nbsp;&nbsp;";
 		if(this.filtersAlreadySet){
 			html+='<button id="__id___resetFilters" onclick="modJs.resetFilters();return false;" class="btn btn-small btn-default">__filterString__ <i class="fa fa-times"></i></button>';
@@ -477,6 +510,12 @@ IceHRMBase.method('createTable', function(elementId) {
 	
 	
 	var headers = this.getHeaders();
+
+	//add translations
+	for(index in headers){
+		headers[index].sTitle = this.gt(headers[index].sTitle);
+	}
+
 	var data = this.getTableData();
 	
 	if(this.showActionButtons()){
@@ -547,6 +586,11 @@ IceHRMBase.method('createTableServer', function(elementId) {
 	var headers = this.getHeaders();
 	
 	headers.push({ "sTitle": "", "sClass": "center" });
+
+	//add translations
+	for(index in headers){
+		headers[index].sTitle = this.gt(headers[index].sTitle);
+	}
 	
 	var html = "";
 	html = this.getTableTopButtonHtml() + this.getTableHTMLTemplate();
@@ -1612,6 +1656,19 @@ IceHRMBase.method('editDataGroup', function() {
 	var validator = new FormValidation(this.getTableName()+"_field_"+field[0],true,{'ShowPopup':false,"LabelErrorClass":"error"});
 	if(validator.checkValues()){
 		var params = validator.getFormParameters();
+
+		if(field[1]['custom-validate-function'] != undefined && field[1]['custom-validate-function'] != null){
+			tempParams = field[1]['custom-validate-function'].apply(this,[params]);
+			if(tempParams['valid']){
+				params = tempParams['params'];
+			}else{
+				$("#"+this.getTableName()+"_field_"+field[0]+"_error").html(tempParams['message']);
+				$("#"+this.getTableName()+"_field_"+field[0]+"_error").show();
+				return false;
+			}
+		}
+
+
 		if(this.doCustomFilterValidation(params)){
 			
 			var val = $("#"+field[0]).val();
@@ -1869,6 +1926,7 @@ IceHRMBase.method('renderFormField', function(field) {
 		return "";
 	}
 	var t = this.fieldTemplates[field[1].type];
+	field[1].label = this.gt(field[1].label);
 	if(field[1].validation != "none" &&  field[1].validation != "emailOrEmpty" && field[1].validation != "numberOrEmpty" && field[1].type != "placeholder" && field[1].label.indexOf('*') < 0){
 		var tempSelectBoxes = ['select','select2'];
 		if(tempSelectBoxes.indexOf(field[1].type) >= 0 && field[1]['allow-null'] == true){
@@ -1941,6 +1999,13 @@ IceHRMBase.method('renderFormField', function(field) {
 	}else{
 		t = t.replace(/_validation_/g,'');
 	}
+
+	if(field[1].help != undefined || field[1].help != null){
+		t = t.replace(/_helpline_/g,field[1].help);
+	}else{
+		t = t.replace(/_helpline_/g,'');
+	}
+
 	return t;
 });
 
@@ -1950,7 +2015,7 @@ IceHRMBase.method('renderFormSelectOptions', function(options, field) {
 	if(field != null && field != undefined){
 		if(field[1]['allow-null'] == true){
 			if(field[1]['null-label'] != undefined && field[1]['null-label'] != null){
-				html += '<option value="NULL">'+field[1]['null-label']+'</option>';
+				html += '<option value="NULL">'+this.gt(field[1]['null-label'])+'</option>';
 			}else{
 				html += '<option value="NULL">Select</option>';
 			}
@@ -1993,7 +2058,7 @@ IceHRMBase.method('renderFormSelectOptionsRemote', function(options,field) {
 	var html = "";
 	if(field[1]['allow-null'] == true){
 		if(field[1]['null-label'] != undefined && field[1]['null-label'] != null){
-			html += '<option value="NULL">'+field[1]['null-label']+'</option>';
+			html += '<option value="NULL">'+this.gt(field[1]['null-label'])+'</option>';
 		}else{
 			html += '<option value="NULL">Select</option>';
 		}

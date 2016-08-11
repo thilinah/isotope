@@ -11,9 +11,9 @@ $customFields = BaseService::getInstance()->getCustomFields("Employee");
 	<ul class="nav nav-tabs" id="modTab" style="margin-bottom:0px;margin-left:5px;border-bottom: none;">
         <?php if($user->user_level != "Admin"){
         ?>
-		    <li class="active"><a id="tabEmployee" href="#tabPageEmployee">Employees (Direct Reports)</a></li>
+		    <li class="active"><a id="tabEmployee" href="#tabPageEmployee">Users</a></li>
         <?php }else{ ?>
-            <li class="active"><a id="tabEmployee" href="#tabPageEmployee">Employees</a></li>
+            <li class="active"><a id="tabEmployee" href="#tabPageEmployee">Users</a></li>
         <?php }?>
 
 	</ul>
@@ -61,10 +61,6 @@ modJsList['tabEmployee'].setFieldNameMap(<?=json_encode($fieldNameMap)?>);
 modJsList['tabEmployee'].setCustomFields(<?=json_encode($customFields)?>);
 
 
-<?php if (!class_exists('DocumentsAdminManager')) {?>
-modJsList['tabEmployeeDocument'] = new EmployeeDocumentAdapter('EmployeeDocument','EmployeeDocument');
-<?php } ?>
-
 var modJs = modJsList['tabEmployee'];
 
 	
@@ -80,7 +76,7 @@ var modJs = modJsList['tabEmployee'];
                 <h3 style="font-size: 17px;">Employee Saved Successfully</h3>
             </div>
             <div class="modal-body">
-                 Employee needs a User to login to IceHrm. Do you want to create a user for this employee now? <br/><br/>You can do this later through Users module if required.
+                 Do you want to create a login for this user now? <br/><br/>You can do this later through Logins module if required.
             </div>
             <div class="modal-footer">
                 <button class="btn btn-primary" onclick="modJs.createUser();">Yes</button>

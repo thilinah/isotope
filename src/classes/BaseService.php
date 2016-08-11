@@ -751,7 +751,7 @@ class BaseService{
 			return $this->findError($error);
 		}else{
 			//Backup
-			if($table == "Profile"){
+			if($table == ucfirst(SIGN_IN_ELEMENT_MAPPING_FIELD_NAME)){
 				$newObj = $this->cleanUpAdoDB($ele);
 				$dataEntryBackup = new DataEntryBackup();
 				$dataEntryBackup->tableType = $table;
@@ -771,6 +771,11 @@ class BaseService{
 				}
 
 			}
+		}
+
+		$cfs = $this->customFieldManager->getCustomFields($table,$id);
+		foreach($cfs as $cf){
+			$cf->Delete();
 		}
 
 		return null;
@@ -1154,8 +1159,6 @@ class BaseService{
 		$module = new Module();
 		$module->Load("update_path = ?",array($group.">".$name));
 
-		LogManager::getInstance()->info(" Current Mod :".json_encode($module));
-
 		$arr = array();
 		$arr['user'] = json_decode($module->user_levels,true);
 		$arr['user_roles'] = !empty($module->user_roles)?json_decode($module->user_roles,true):array();
@@ -1487,7 +1490,7 @@ class CustomFieldManager {
 			$customFields[$cf->name] = $cf;
 		}
 
-		$customFieldValues = $this->getCustomFields('Employee',$object->id);
+		$customFieldValues = $this->getCustomFields($table,$object->id);
 		$object->customFields = array();
 		foreach ($customFieldValues as $cf){
 

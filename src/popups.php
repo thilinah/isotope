@@ -159,7 +159,7 @@
 						<label class="control-label" for="expense_status"><?=$itemName?> Status</label>
 						<div class="controls">
 							<select type="text" id="<?=$itemNameLower?>_status" class="form-control" name="<?=$itemNameLower?>_status" value="">
-								
+
 							</select>
 						</div>
 					</div>

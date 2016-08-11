@@ -1,7 +1,7 @@
 {
   "label":"Manage Permissions",
-  "menu":"System",
-  "order":"4",
+  "menu":"Admin",
+  "order":"7",
   "icon":"fa-unlock",
   "user_levels":["Admin"],
   "dashboardPosition":15,

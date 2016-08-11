@@ -100,103 +100,51 @@ EmployeeAdapter.method('setCustomFields', function(fields) {
     }
 });
 
-EmployeeAdapter.method('getTableFields', function() {
-    var tableFields = [
-        "id",
-        "image",
-        "employee_id",
-        "first_name",
-        "last_name",
-        "mobile_phone",
-        "department",
-        "gender",
-        "supervisor"
-    ];
-    return tableFields;
-});
 
 EmployeeAdapter.method('getDataMapping', function() {
-    var tableFields = this.getTableFields();
-
-    var newTableFields = [];
-    for(var i=0;i<tableFields.length;i++){
-        if((this.hiddenFields[tableFields[i]] == undefined || this.hiddenFields[tableFields[i]] == null )&&
-            (this.formOnlyFields[tableFields[i]] == undefined || this.formOnlyFields[tableFields[i]] == null )){
-            newTableFields.push(tableFields[i]);
-        }
-    }
-
-    return newTableFields;
+    return [
+        "id",
+        "image",
+        "first_name",
+        "last_name",
+        "work_email",
+        "home_phone",
+        "department",
+        "country"
+    ];
 });
 
 EmployeeAdapter.method('getHeaders', function() {
-    var tableFields = this.getTableFields();
-    var headers =  [
+    return [
         { "sTitle": "ID","bVisible":false },
-        { "sTitle": "" ,"bSortable":false}
+        { "sTitle": "" },
+        { "sTitle": "First Name","bSortable":false},
+        { "sTitle": "Last Name","bSortable":false},
+        { "sTitle": "Email"},
+        { "sTitle": "Phone"},
+        { "sTitle": "Department / Unit"},
+        { "sTitle": "Country", "sClass": "center" }
     ];
-    var title = "";
-
-    for(var i=0;i<tableFields.length;i++){
-        if((this.hiddenFields[tableFields[i]] == undefined || this.hiddenFields[tableFields[i]] == null )&&
-            (this.formOnlyFields[tableFields[i]] == undefined || this.formOnlyFields[tableFields[i]] == null )){
-            if(this.fieldNameMap[tableFields[i]] != undefined && this.fieldNameMap[tableFields[i]] != null){
-                title = this.fieldNameMap[tableFields[i]].textMapped;
-                if(title == undefined || title == null || title == ""){
-                    headers.push({ "sTitle": title,"bSortable":false});
-                }else{
-                    headers.push({ "sTitle": title});
-                }
-
-            }
-
-        }
-    }
-
-    return headers;
 });
 
 EmployeeAdapter.method('getFormFields', function() {
 
-    var newFields = [];
-    var tempField, title;
     var fields = [
         [ "id", {"label":"ID","type":"hidden","validation":""}],
-        [ "employee_id", {"label":"Employee Number","type":"text","validation":""}],
         [ "first_name", {"label":"First Name","type":"text","validation":""}],
-        [ "middle_name", {"label":"Middle Name","type":"text","validation":"none"}],
         [ "last_name", {"label":"Last Name","type":"text","validation":""}],
-        [ "nationality", {"label":"Nationality","type":"select2","remote-source":["Nationality","id","name"]}],
+        [ "work_email", {"label":"Email","type":"text","validation":"email"}],
         [ "birthday", {"label":"Date of Birth","type":"date","validation":""}],
         [ "gender", {"label":"Gender","type":"select","source":[["Male","Male"],["Female","Female"]]}],
-        [ "marital_status", {"label":"Marital Status","type":"select","source":[["Married","Married"],["Single","Single"],["Divorced","Divorced"],["Widowed","Widowed"],["Other","Other"]]}],
-        [ "ethnicity", {"label":"Ethnicity","type":"select2","allow-null":true,"remote-source":["Ethnicity","id","name"]}],
-        [ "immigration_status", {"label":"Immigration Status","type":"select2","allow-null":true,"remote-source":["ImmigrationStatus","id","name"]}],
-        [ "ssn_num", {"label":"SSN/NRIC","type":"text","validation":"none"}],
-        [ "nic_num", {"label":"NIC","type":"text","validation":"none"}],
-        [ "other_id", {"label":"Other ID","type":"text","validation":"none"}],
-        [ "driving_license", {"label":"Driving License No","type":"text","validation":"none"}],
-        [ "work_station_id", {"label":"Work Station Id","type":"text","validation":"none"}],
         [ "address1", {"label":"Address Line 1","type":"text","validation":"none"}],
         [ "address2", {"label":"Address Line 2","type":"text","validation":"none"}],
         [ "city", {"label":"City","type":"text","validation":"none"}],
         [ "country", {"label":"Country","type":"select2","remote-source":["Country","code","name"]}],
         [ "province", {"label":"State","type":"select2","allow-null":true,"remote-source":["Province","id","name"]}],
         [ "postal_code", {"label":"Postal/Zip Code","type":"text","validation":"none"}],
-        [ "home_phone", {"label":"Home Phone","type":"text","validation":"none"}],
-        [ "mobile_phone", {"label":"Mobile Phone","type":"text","validation":"none"}],
-        [ "work_phone", {"label":"Work Phone","type":"text","validation":"none"}],
-        [ "work_email", {"label":"Work Email","type":"text","validation":"emailOrEmpty"}],
-        [ "private_email", {"label":"Private Email","type":"text","validation":"emailOrEmpty"}],
+        [ "home_phone", {"label":"Phone","type":"text","validation":"none"}],
         [ "joined_date", {"label":"Joined Date","type":"date","validation":""}],
-        [ "confirmation_date", {"label":"Confirmation Date","type":"date","validation":"none"}],
-        [ "termination_date", {"label":"Termination Date","type":"date","validation":"none"}],
-        [ "department", {"label":"Department","type":"select2","remote-source":["CompanyStructure","id","title"]}],
-        [ "supervisor", {"label":"Direct Supervisor","type":"select2","allow-null":true,"remote-source":["Employee","id","first_name+last_name"]}],
-        [ "indirect_supervisors", {"label":"Indirect Supervisors","type":"select2multi","allow-null":true,"remote-source":["Employee","id","first_name+last_name"]}],
-        [ "approver1", {"label":"First Level Approver","type":"select2","allow-null":true,"remote-source":["Employee","id","first_name+last_name"]}],
-        [ "approver2", {"label":"Second Level Approver","type":"select2","allow-null":true,"remote-source":["Employee","id","first_name+last_name"]}],
-        [ "approver3", {"label":"Third Level Approver","type":"select2","allow-null":true,"remote-source":["Employee","id","first_name+last_name"]}],
+        [ "department", {"label":"Company/Unit","type":"select2","remote-source":["CompanyStructure","id","title"]}],
         [ "notes", {"label":"Notes","type":"datagroup",
             "form":[
                 [ "note", {"label":"Note","type":"textarea","validation":""}]
@@ -221,34 +169,43 @@ EmployeeAdapter.method('getFormFields', function() {
         }]
     ];
 
-    for(var i=0;i<this.customFields.length;i++){
-        fields.push(this.customFields[i]);
-    }
-
-    for(var i=0;i<fields.length;i++){
-        tempField = fields[i];
-        if(this.hiddenFields[tempField[0]] == undefined || this.hiddenFields[tempField[0]] == null ){
-            if(this.fieldNameMap[tempField[0]] != undefined && this.fieldNameMap[tempField[0]] != null){
-                title = this.fieldNameMap[tempField[0]].textMapped;
-                tempField[1]['label'] = title;
-            }
-            newFields.push(tempField);
-        }
-    }
-
-    return newFields;
+    return fields;
 
 });
 
 EmployeeAdapter.method('getFilters', function() {
     return [
-        [ "department", {"label":"Department","type":"select2","allow-null":true,"null-label":"All Departments","remote-source":["CompanyStructure","id","title"]}],
-        [ "supervisor", {"label":"Supervisor","type":"select2","allow-null":true,"null-label":"Anyone","remote-source":["Employee","id","first_name+last_name"]}]
+        [ "department", {"label":"Department","type":"select2","allow-null":true,"null-label":"All Departments","remote-source":["CompanyStructure","id","title"]}]
     ];
 });
 
-EmployeeAdapter.method('getActionButtonsHtml', function(id) {
-    var html = '<div style="width:110px;"><img class="tableActionButton" src="_BASE_images/user.png" style="cursor:pointer;" rel="tooltip" title="Login as this Employee" onclick="modJs.setAdminProfile(_id_);return false;"></img><img class="tableActionButton" src="_BASE_images/view.png" style="cursor:pointer;margin-left:15px;" rel="tooltip" title="View" onclick="modJs.view(_id_);return false;"></img><img class="tableActionButton" src="_BASE_images/edit.png" style="display:none;cursor:pointer;margin-left:15px;" rel="tooltip" title="Edit" onclick="modJs.edit(_id_);return false;"></img><img class="tableActionButton" src="_BASE_images/connect-no.png" style="margin-left:15px;cursor:pointer;" rel="tooltip" title="Terminate Employee" onclick="modJs.terminateEmployee(_id_);return false;"></img></div>';
+EmployeeAdapter.method('getActionButtonsHtml', function(id,data) {
+    var viewButton = '<img class="tableActionButton" src="_BASE_images/view.png" style="cursor:pointer;" rel="tooltip" title="Edit" onclick="modJs.view(_id_);return false;"></img>';
+    var editButton = '<img class="tableActionButton" src="_BASE_images/edit.png" style="margin-left:15px;cursor:pointer;" rel="tooltip" title="Edit" onclick="modJs.edit(_id_);return false;"></img>';
+    var deleteButton = '<img class="tableActionButton" src="_BASE_images/delete.png" style="margin-left:15px;cursor:pointer;" rel="tooltip" title="Delete" onclick="modJs.deleteRow(_id_);return false;"></img>';
+    var cloneButton = '<img class="tableActionButton" src="_BASE_images/clone.png" style="margin-left:15px;cursor:pointer;" rel="tooltip" title="Copy" onclick="modJs.copyRow(_id_);return false;"></img>';
+    var html = '<div style="width:120px;">_view__edit__delete__clone_</div>';
+
+    html = html.replace('_view_',viewButton);
+
+    if(this.showAddNew){
+        html = html.replace('_clone_',cloneButton);
+    }else{
+        html = html.replace('_clone_','');
+    }
+
+    if(this.showDelete){
+        html = html.replace('_delete_',deleteButton);
+    }else{
+        html = html.replace('_delete_','');
+    }
+
+    if(this.showEdit){
+        html = html.replace('_edit_',editButton);
+    }else{
+        html = html.replace('_edit_','');
+    }
+
     html = html.replace(/_id_/g,id);
     html = html.replace(/_BASE_/g,this.baseUrl);
     return html;
@@ -338,7 +295,7 @@ EmployeeAdapter.method('terminateEmployeeSuccessCallback', function(callBackData
 
 
 EmployeeAdapter.method('terminateEmployeeFailCallback', function(callBackData) {
-    this.showMessage("Error occured while terminating Employee", callBackData);
+    this.showMessage("Error occurred while terminating Employee", callBackData);
 });
 
 
@@ -369,7 +326,7 @@ EmployeeAdapter.method('activateEmployeeSuccessCallback', function(callBackData)
 
 
 EmployeeAdapter.method('activateEmployeeFailCallback', function(callBackData) {
-    this.showMessage("Error occured while activating Employee", callBackData);
+    this.showMessage("Error occurred while activating Employee", callBackData);
 });
 
 
@@ -391,7 +348,7 @@ EmployeeAdapter.method('view', function(id) {
 
 
 EmployeeAdapter.method('viewFailCallBack', function(callBackData) {
-    this.showMessage("Error","Error Occured while retriving candidate");
+    this.showMessage("Error","Error Occurred while retriving candidate");
 });
 
 EmployeeAdapter.method('renderEmployee', function(data) {
@@ -405,13 +362,6 @@ EmployeeAdapter.method('renderEmployee', function(data) {
     var html = this.getCustomTemplate('myDetails.html');
 
 
-    for(var i=0;i<fields.length;i++) {
-        if(this.fieldNameMap[fields[i][0]] != undefined && this.fieldNameMap[fields[i][0]] != null){
-            title = this.fieldNameMap[fields[i][0]].textMapped;
-            html = html.replace("#_label_"+fields[i][0]+"_#",title);
-        }
-    }
-
     html = html.replace(/#_.+_#/i,"");
     html = html.replace(/_id_/g,data.id);
 
@@ -422,23 +372,7 @@ EmployeeAdapter.method('renderEmployee', function(data) {
         $("#"+this.getTableName()+" #" + fields[i][0]+"_Name").html(data[fields[i][0]+"_Name"]);
     }
 
-    var subordinates = "";
-    for(var i=0;i<data.subordinates.length;i++){
-        if(data.subordinates[i].first_name != undefined && data.subordinates[i].first_name != null){
-            subordinates += data.subordinates[i].first_name+" ";
-        }
-        +data.subordinates[i].middle_name
-        if(data.subordinates[i].middle_name != undefined && data.subordinates[i].middle_name != null && data.subordinates[i].middle_name != ""){
-            subordinates += data.subordinates[i].middle_name+" ";
-        }
 
-        if(data.subordinates[i].last_name != undefined && data.subordinates[i].last_name != null && data.subordinates[i].last_name != ""){
-            subordinates += data.subordinates[i].last_name;
-        }
-        subordinates += "<br/>";
-    }
-
-    $("#"+this.getTableName()+" #subordinates").html(subordinates);
 
 
     $("#"+this.getTableName()+" #name").html(data.first_name + " " + data.last_name);
@@ -450,37 +384,6 @@ EmployeeAdapter.method('renderEmployee', function(data) {
     var sectionTemplate = '<div class="row" style="margin-left:10px;margin-top:20px;"><div class="panel panel-default" style="width:97.5%;"><div class="panel-heading"><h4>#_section.name_#</h4></div> <div class="panel-body"  id="cont_#_section_#"> </div></div></div>';
     var sectionId = '';
     var sectionHtml = '';
-    //Add custom fields
-    if(data.customFields != undefined && data.customFields != null && Object.keys(data.customFields).length > 0) {
-
-
-        var ct = '<div class="col-xs-6 col-md-3" style="font-size:16px;"><label class="control-label col-xs-12" style="font-size:13px;">#_label_#</label><label class="control-label col-xs-12 iceLabel" style="font-size:13px;font-weight: bold;">#_value_#</label></div>';
-        var customFieldHtml;
-        for (index in data.customFields) {
-
-            if(!data.customFields[index][1]){
-                data.customFields[index][1] = 'Other Details';
-            }
-
-            sectionId = data.customFields[index][1].toLocaleLowerCase();
-            sectionId = sectionId.replace(' ','_');
-
-            if($("#cont_"+sectionId).length <= 0){
-                //Add section
-                sectionHtml = sectionTemplate;
-                sectionHtml = sectionHtml.replace('#_section_#', sectionId);
-                sectionHtml = sectionHtml.replace('#_section.name_#', data.customFields[index][1]);
-                $("#customFieldsCont").append($(sectionHtml));
-            }
-
-            customFieldHtml = ct;
-            customFieldHtml = customFieldHtml.replace('#_label_#', index);
-            customFieldHtml = customFieldHtml.replace('#_value_#', data.customFields[index][0]);
-            $("#cont_"+sectionId).append($(customFieldHtml));
-        }
-    }else{
-        $("#customFieldsCont").remove();
-    }
 
 
     this.cancel();

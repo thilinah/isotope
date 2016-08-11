@@ -1,7 +1,7 @@
 <?php
 if(!defined('SIGN_IN_ELEMENT_MAPPING_FIELD_NAME')){define('SIGN_IN_ELEMENT_MAPPING_FIELD_NAME','employee');}
 
-if(!defined('APP_NAME')){define('APP_NAME','Ice Camp');}
+if(!defined('APP_NAME')){define('APP_NAME','Isotope');}
 if(!defined('FB_URL')){define('FB_URL', 'https://www.facebook.com/icecamp');};
 if(!defined('TWITTER_URL')){define('TWITTER_URL', 'https://twitter.com/icecamp');};
 

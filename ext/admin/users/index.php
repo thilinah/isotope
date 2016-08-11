@@ -29,8 +29,8 @@ include APP_BASE_PATH.'modulejslibs.inc.php';
 ?><div class="span9">
 			  
 	<ul class="nav nav-tabs" id="modTab" style="margin-bottom:0px;margin-left:5px;border-bottom: none;">
-		<li class="active"><a id="tabUser" href="#tabPageUser">Users</a></li>
-		<li class=""><a id="tabUserRole" href="#tabPageUserRole">User Roles</a></li>
+		<li class="active"><a id="tabUser" href="#tabPageUser">Logins</a></li>
+		<li class=""><a id="tabUserRole" href="#tabPageUserRole">Login Roles</a></li>
 	</ul>
 	 
 	<div class="tab-content">

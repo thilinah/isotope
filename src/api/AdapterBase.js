@@ -96,6 +96,7 @@ AdapterBase.method('add', function(object,getFunctionCallBackData,callGetFunctio
 	$(object).attr('a','add');
 	$(object).attr('t',this.table);
     that.showLoader();
+	this.requestCache.invalidateTable(this.table);
 	$.post(this.moduleRelativeURL, object, function(data) {
 		if(data.status == "SUCCESS"){
 			that.addSuccessCallBack(getFunctionCallBackData,data.object, callGetFunction, successCallback, that);
@@ -128,6 +129,7 @@ AdapterBase.method('addFailCallBack', function(callBackData,serverData) {
 AdapterBase.method('deleteObj', function(id,callBackData) {
 	var that = this;
     that.showLoader();
+	this.requestCache.invalidateTable(this.table);
 	$.post(this.moduleRelativeURL, {'t':this.table,'a':'delete','id':id}, function(data) {
 		if(data.status == "SUCCESS"){
 			that.deleteSuccessCallBack(callBackData,data.object);
@@ -351,6 +353,7 @@ AdapterBase.method('getFieldValues', function(fieldMaster,callBackData) {
     var callbackWraper = function(data) {
         if(data.status == "SUCCESS"){
             that.requestCache.setData(this.success.key, data);
+
             callBackData['callBackData'].push(data.data);
             if(callBackData['callBackSuccess'] != null && callBackData['callBackSuccess'] != undefined){
                 callBackData['callBackData'].push(callBackData['callBackSuccess']);
@@ -360,6 +363,7 @@ AdapterBase.method('getFieldValues', function(fieldMaster,callBackData) {
     };
 
     callbackWraper.key = key;
+    callbackWraper.table = fieldMaster[0];
 
     $.post(this.moduleRelativeURL, {'t':fieldMaster[0],'key':fieldMaster[1],'value':fieldMaster[2],'method':method,'methodParams':methodParams,'a':'getFieldValues'}, callbackWraper,"json");
 
@@ -1142,8 +1146,22 @@ RequestCache.method('getKey', function(url,params) {
     return key;
 });
 
+RequestCache.method('invalidateTable', function(table) {
+
+	var key;
+	for (var i = 0; i < localStorage.length; i++){
+		key = localStorage.key(i);
+		if(key.indexOf('t='+table) > 0){
+			localStorage.removeItem(key);
+		}
+
+	}
+});
+
+
 RequestCache.method('getData', function(key) {
     var data;
+
     if (typeof(Storage) == "undefined") {
         return null;
     }
@@ -1176,6 +1194,6 @@ RequestCache.method('setData', function(key, data) {
     }
 
     var strData = JSON.stringify(data);
-    var strData = localStorage.setItem(key,strData);
+    localStorage.setItem(key,strData);
     return strData;
 });

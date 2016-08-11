@@ -1,7 +1,7 @@
 {
-  "label":"Employees",
-  "menu":"Employees",
-  "order":"1",
+  "label":"Users",
+  "menu":"Admin",
+  "order":"3",
   "icon":"fa-users",
   "user_levels":["Admin","Manager"],
   "dashboardPosition":1,

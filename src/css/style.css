@@ -32,7 +32,7 @@
 .nav-pills  li  a:hover{
     background: #1D64AD;
     color:white;
-};
+}
 
 .navbar-inverse .brand, .navbar-inverse .nav > li > a {
     font-weight: bold;
@@ -221,11 +221,8 @@ border-radius: 4px 0 4px 0;
 .nav-pills  li  a:hover{
     background: #1D64AD;
     color:white;
-};
-
-.nav-tabs > li > a {
-    color:white;
 }
+
 
 .nav-tabs > li > a:hover{
     color:#555;
@@ -666,3 +663,5 @@ table.dataTable{
 .select2Multi{
     height:auto !important;
 }
+
+.callout h4{color: #FFF !important;}

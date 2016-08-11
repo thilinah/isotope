@@ -1,7 +1,7 @@
 {
 "label":"Audit Log",
 "menu":"Admin",
-"order":"92",
+"order":"10",
 "icon":"fa-compass",
 "user_levels":["Admin"],
 

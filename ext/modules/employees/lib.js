@@ -101,19 +101,7 @@ EmployeeAdapter.method('getHeaders', function() {
 
 EmployeeAdapter.method('getFormFields', function() {
 	var fields, newFields = [];
-	var employee_id, ssn_num, joined_date, department, work_email, country;
-	
-	if(this.checkPermission("Edit Employee Number") == "Yes"){
-		employee_id = [ "employee_id", {"label":"Employee Number","type":"text","validation":""}];
-	}else{
-		employee_id = [ "employee_id", {"label":"Employee Number","type":"placeholder","validation":""}];
-	}
-	
-	if(this.checkPermission("Edit EPF/CPF Number") == "Yes"){
-		ssn_num = [ "ssn_num", {"label":"EPF/CPF/SS No","type":"text","validation":"none"}];
-	}else{
-		ssn_num = [ "ssn_num", {"label":"EPF/CPF/SS No","type":"placeholder","validation":"none"}];
-	}
+	var joined_date, department, country;
 
 	
 	if(this.checkPermission("Edit Joined Date") == "Yes"){
@@ -127,12 +115,7 @@ EmployeeAdapter.method('getFormFields', function() {
 	}else{
 		department = [ "department", {"label":"Department","type":"placeholder","remote-source":["CompanyStructure","id","title"]}];
 	}
-	
-	if(this.checkPermission("Edit Work Email") == "Yes"){
-		work_email = [ "work_email", {"label":"Work Email","type":"text","validation":"email"}];
-	}else{
-		work_email = [ "work_email", {"label":"Work Email","type":"placeholder","validation":"emailOrEmpty"}];
-	}
+
 	
 	if(this.checkPermission("Edit Country") == "Yes"){
 		country = [ "country", {"label":"Country","type":"select2","remote-source":["Country","code","name"]}];
@@ -142,30 +125,18 @@ EmployeeAdapter.method('getFormFields', function() {
 
     fields = [
 	        [ "id", {"label":"ID","type":"hidden","validation":""}],
-	        employee_id,
 	        [ "first_name", {"label":"First Name","type":"text","validation":""}],
-	        [ "middle_name", {"label":"Middle Name","type":"text","validation":"none"}],
 	        [ "last_name", {"label":"Last Name","type":"text","validation":""}],
-	        [ "nationality", {"label":"Nationality","type":"select2","remote-source":["Nationality","id","name"]}],
-	        [ "birthday", {"label":"Date of Birth","type":"date","validation":""}],
+			[ "work_email", {"label":"Email","type":"text","validation":"email"}],
+		    [ "birthday", {"label":"Date of Birth","type":"date","validation":""}],
 	        [ "gender", {"label":"Gender","type":"select","source":[["Male","Male"],["Female","Female"]]}],
-	        [ "marital_status", {"label":"Marital Status","type":"select","source":[["Married","Married"],["Single","Single"],["Divorced","Divorced"],["Widowed","Widowed"],["Other","Other"]]}],
-	        ssn_num,
-	        [ "nic_num", {"label":"NIC","type":"text","validation":"none"}],
-	        [ "other_id", {"label":"Other ID","type":"text","validation":"none"}],
-	        [ "driving_license", {"label":"Driving License No","type":"text","validation":"none"}],
 	        [ "work_station_id", {"label":"Work Station Id","type":"text","validation":"none"}],
 	        [ "address1", {"label":"Address Line 1","type":"text","validation":"none"}],
 	        [ "address2", {"label":"Address Line 2","type":"text","validation":"none"}],
 	        [ "city", {"label":"City","type":"text","validation":"none"}],
 	        country,
-	        [ "province", {"label":"Province","type":"select2","allow-null":true,"remote-source":["Province","id","name"]}],
 	        [ "postal_code", {"label":"Postal/Zip Code","type":"text","validation":"none"}],
-	        [ "home_phone", {"label":"Home Phone","type":"text","validation":"none"}],
-	        [ "mobile_phone", {"label":"Mobile Phone","type":"text","validation":"none"}],
-	        [ "work_phone", {"label":"Work Phone","type":"text","validation":"none"}],
-	        work_email,
-	        [ "private_email", {"label":"Private Email","type":"text","validation":"emailOrEmpty"}],
+	        [ "home_phone", {"label":"Phone","type":"text","validation":"none"}],
 	        joined_date,
 	        department
 	];
@@ -174,19 +145,7 @@ EmployeeAdapter.method('getFormFields', function() {
 		fields.push(this.customFields[i]);
 	}
 
-
-    for(var i=0;i<fields.length;i++){
-    	tempField = fields[i];
-        if(this.hiddenFields[tempField[0]] == undefined || this.hiddenFields[tempField[0]] == null ){
-            if(this.fieldNameMap[tempField[0]] != undefined && this.fieldNameMap[tempField[0]] != null){
-                title = this.fieldNameMap[tempField[0]].textMapped;
-                tempField[1]['label'] = title;
-            }
-            newFields.push(tempField);
-        }
-    }
-
-    return newFields;
+    return fields;
 });
 
 EmployeeAdapter.method('getSourceMapping' , function() {
